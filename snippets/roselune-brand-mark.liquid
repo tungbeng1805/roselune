@@ -1,0 +1,19 @@
+{% doc %}
+  Displays the supplied brand artwork. The display filter masks its baked-in neutral checkerboard.
+  @param {string} brand
+  @param {boolean} [lazy]
+{% enddoc %}
+<svg class="roselune-brand-filter" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="roselune-brand-{{ section.id }}" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  12 -6 -6 0 -0.09"/>
+    </filter>
+  </defs>
+</svg>
+<img class="roselune-brand-art" src="{{ 'roselune-emblem.webp' | asset_url }}"
+  width="768" height="512" alt="{{ brand | escape }}" loading="{% if lazy %}lazy{% else %}eager{% endif %}"
+  style="filter: url(#roselune-brand-{{ section.id }})">
+{% stylesheet %}
+  .roselune-brand-filter { position: absolute; pointer-events: none; }
+  .roselune-brand-art { display: block; width: 100%; height: auto; }
+{% endstylesheet %}

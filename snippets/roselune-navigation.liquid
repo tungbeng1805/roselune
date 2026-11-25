@@ -1,0 +1,29 @@
+{% doc %}
+  @param {linklist} menu
+  @param {number} start
+  @param {number} count
+{% enddoc %}
+{% if menu.links != blank %}
+  <nav class="roselune-nav" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
+    <ul>{% for link in menu.links offset: start limit: count %}
+      <li>
+        <a href="{{ link.url | escape }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {% if link.links != blank %}
+          <details>
+            <summary aria-label="{{ 'accessibility.show_submenu' | t: title: link.title | escape }}"><span aria-hidden="true">⌄</span></summary>
+            <ul class="roselune-dropdown">
+              {% for child in link.links %}
+                <li>
+                  <a href="{{ child.url | escape }}">{{ child.title | escape }}</a>
+                  {% if child.links != blank %}<ul>
+                    {% for grandchild in child.links %}<li><a href="{{ grandchild.url | escape }}">{{ grandchild.title | escape }}</a></li>{% endfor %}
+                  </ul>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% endif %}
+      </li>
+    {% endfor %}</ul>
+  </nav>
+{% endif %}

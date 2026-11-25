@@ -1,0 +1,371 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+{% liquid
+  assign logo = s.logo | default: settings.logo
+  assign menu_size = s.menu.links.size
+  assign menu_half = menu_size | plus: 1 | divided_by: 2
+  assign brand = s.brand | default: shop.name
+  assign logo_sizes = '(max-width: 749px) ' | append: s.mobile_logo_width | append: 'px, ' | append: s.logo_width | append: 'px'
+%}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --roselune-logo: {{ s.logo_width }}px; --roselune-mobile-logo: {{ s.mobile_logo_width }}px;
+    --roselune-header-height: {{ s.height }}px; --roselune-icons: {{ s.icon_color }};
+    --roselune-rule: {% if s.show_border %}{{ s.border_color }}{% else %}transparent{% endif %};
+    --roselune-transparent-ink: {{ s.transparent_ink }};
+  }
+{% endstyle %}
+<script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":{{ shop.name | json }},
+   {% if logo %}"logo":{{ logo | image_url: width: 500 | prepend: 'https:' | json }},{% endif %}
+   "url":{{ request.origin | json }}}
+</script>
+<script type="module" src="{{ 'roselune-header.js' | asset_url }}"></script>
+<roselune-header id="header-component" class="roselune-section roselune-header roselune-flower-corners"
+  {% if s.sticky %}data-roselune-sticky{% endif %}
+  {% if s.transparent and request.page_type == 'index' %}data-roselune-transparent{% endif %}
+  {% unless s.show_account %}data-roselune-hide-account{% endunless %}
+  {% unless s.show_cart %}data-roselune-hide-cart{% endunless %}>
+  <header>
+    <div class="roselune-mast roselune-mast--{{ s.nav_layout }}">
+      <div class="roselune-header-tools">
+        <div class="roselune-mobile-menu">
+          {% render 'header-drawer', linklist: s.menu, section: section, data_header_drawer_type: 'mobile-drawer' %}
+        </div>
+        {% if s.show_search %}<div class="roselune-search-start">{% render 'search', display_style: 'icon' %}</div>{% endif %}
+        {% if s.nav_layout == 'split' %}{% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_half %}{% endif %}
+        <div class="roselune-region">{% render 'roselune-localization', s: s %}</div>
+      </div>
+      <a class="roselune-brand" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}">
+        {% if logo != blank or s.mobile_logo != blank %}
+          {% render 'roselune-picture', image: logo, mobile: s.mobile_logo, alt: brand, sizes: logo_sizes, max_width: 900, priority: true %}
+        {% elsif s.bundled_logo %}{% render 'roselune-brand-mark', brand: brand %}
+        {% else %}<span class="roselune-wordmark">{{ brand | escape }}</span>{% endif %}
+      </a>
+      <div class="roselune-header-tools roselune-actions">
+        {% if s.nav_layout == 'split' %}
+          {% render 'roselune-navigation', menu: s.menu, start: menu_half, count: menu_size %}
+          {% if s.show_search %}<div class="roselune-search-end">{% render 'search', display_style: 'icon' %}</div>{% endif %}
+        {% endif %}
+        {% if s.show_wishlist and s.wishlist_url != blank %}
+          <a class="roselune-wishlist" href="{{ s.wishlist_url | escape }}" aria-label="{{ s.wishlist_label | escape }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21 3.2 12.1C-2.2 6.5 5.8-.8 12 6.1c6.2-6.9 14.2.4 8.8 6z"/></svg>
+          </a>
+        {% endif %}
+        {% render 'header-actions', section: section, display_style: 'icon', customer_account_menu: s.account_menu.handle %}
+      </div>
+    </div>
+    {% if s.nav_layout != 'split' %}
+      {% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_size %}
+    {% endif %}
+    {% if s.tagline != blank %}<p class="roselune-header-tagline">{{ s.tagline | escape }}</p>{% endif %}
+  </header>
+</roselune-header>
+{% stylesheet %}
+  .roselune-header-tagline {
+    display: flex; align-items: center; justify-content: center; gap: 12px; text-align: center;
+    padding: 0 12px 10px; font: italic clamp(.85rem, 1.35vw, 1.3rem)/1.35 'Snell Roundhand', 'Segoe Script', var(--roselune-font);
+  }
+  .roselune-header-tagline::before, .roselune-header-tagline::after { content: ''; width: 2.5em; height: 1px; background: currentColor; opacity: .45; }
+  .roselune-search-end { display: none; }
+  .roselune-header-wrap { z-index: var(--layer-menu-drawer, 9); position: relative; flex: none; }
+  #header-group:has(.roselune-header[data-roselune-sticky]) { display: contents; }
+  .roselune-header-wrap:has([data-roselune-sticky]) { position: sticky; top: -1px; }
+  .roselune-header-wrap:has([data-roselune-transparent]):last-child { margin-bottom: calc(-1 * var(--header-height, 0px)); }
+  .roselune-header[data-roselune-transparent]:not([data-sticky-state="active"]):not(:focus-within):not(:hover) {
+    background: transparent; color: var(--roselune-transparent-ink); --roselune-heading: currentColor; --roselune-icons: currentColor;
+  }
+  .roselune-header { display: block; border-bottom: 1px solid var(--roselune-rule); }
+  .roselune-mast { padding: var(--roselune-pad-mobile) 8px; display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; }
+  .roselune-header-tools { display: flex; align-items: center; color: var(--roselune-icons); --color-account-icon: var(--roselune-icons); }
+  .roselune-actions { justify-content: flex-end; }
+  .roselune-brand { container-type: inline-size; width: min(var(--roselune-mobile-logo), calc(100vw - 200px)); text-decoration: none; text-align: center; color: inherit; }
+  .roselune-brand .roselune-wordmark { display: block; font-size: min(14cqi, 2.5rem); }
+  .roselune-header-tools .header-actions__action, .roselune-mobile-menu summary.header__icon, .roselune-wishlist {
+    min-width: 44px; min-height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; color: inherit;
+  }
+  .roselune-actions shopify-account { --color-account-icon: var(--roselune-icons); }
+  .roselune-header[data-roselune-hide-account] .account-button,
+  .roselune-header[data-roselune-hide-cart] header-actions > :is(button,a) { display: none; }
+  .roselune-actions:has(.roselune-wishlist) { flex-wrap: wrap; }
+  .roselune-nav, .roselune-region { display: none; }
+  .roselune-region { position: relative; }
+  .roselune-region form { position: absolute; z-index: 3; top: 100%; background: var(--roselune-bg); color: var(--roselune-ink); padding: 16px; min-width: 240px; }
+  @media (min-width: 750px) {
+    .roselune-mast { min-height: var(--roselune-header-height); padding: var(--roselune-pad) clamp(20px, 4vw, 80px); }
+    .roselune-brand { width: min(30vw,var(--roselune-logo)); }
+    .roselune-mobile-menu { display: none; }
+    .roselune-nav, .roselune-region { display: block; }
+    .roselune-nav { border-top: 1px solid var(--roselune-rule); }
+    .roselune-nav ul { list-style: none; margin: 0; padding: 0; }
+    .roselune-nav > ul { display: flex; justify-content: center; flex-wrap: wrap; column-gap: clamp(8px, 2vw, 44px); padding-inline: 24px; }
+    .roselune-nav > ul > li { display: flex; align-items: center; position: relative; max-width: 100%; }
+    .roselune-nav a, .roselune-nav summary { display: flex; align-items: center; min-height: 44px; text-decoration: none; color: inherit; }
+    .roselune-nav > ul > li > a { font-size: .8rem; letter-spacing: .09em; text-transform: uppercase; }
+    .roselune-nav a:hover, .roselune-nav [aria-current] { text-decoration: underline; text-underline-offset: .35em; }
+    .roselune-nav summary { cursor: pointer; padding-inline: 8px; list-style: none; }
+    .roselune-nav .roselune-dropdown { position: absolute; z-index: 3; inset-inline-start: 0; top: 100%; min-width: min(220px, 35vw); max-height: 60vh; overflow: auto; padding: 12px 20px; box-shadow: 0 8px 20px #30131919; background: var(--roselune-bg); color: var(--roselune-ink); }
+    .roselune-mast--split { column-gap: clamp(8px, 2vw, 40px); }
+    .roselune-mast--split .roselune-header-tools { justify-content: center; flex-wrap: wrap; }
+    .roselune-mast--split .roselune-actions { justify-content: flex-end; }
+    .roselune-mast--split .roselune-search-start { display: none; }
+    .roselune-mast--split .roselune-search-end { display: block; }
+    .roselune-mast--split .roselune-nav { border: 0; min-width: 0; color: var(--roselune-ink); }
+    .roselune-mast--split .roselune-nav > ul { padding: 0; gap: 0 clamp(12px, 1.8vw, 32px); }
+    .roselune-mast--split .roselune-nav > ul > li > a { font-family: var(--roselune-font); text-transform: none; letter-spacing: .015em; font-size: clamp(.85rem, 1.2vw, 1.1rem); }
+    .roselune-nav li:last-child .roselune-dropdown { inset-inline: auto 0; }
+    .roselune-dropdown ul { padding-inline-start: 14px; border-inline-start: 1px solid var(--roselune-rule); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "checkbox",
+      "id": "bundled_logo",
+      "label": "Use supplied ROSELUNE emblem",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Desktop logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_logo",
+      "label": "Mobile logo"
+    },
+    {
+      "type": "text",
+      "id": "brand",
+      "label": "Wordmark fallback",
+      "default": "ROSELUNE"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Desktop logo width",
+      "default": 220,
+      "min": 100,
+      "max": 400,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "Mobile logo width",
+      "default": 125,
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "select",
+      "id": "nav_layout",
+      "label": "Desktop navigation layout",
+      "options": [
+        {
+          "value": "stacked",
+          "label": "Below logo"
+        },
+        {
+          "value": "split",
+          "label": "Each side of logo"
+        }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Masthead tagline"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main navigation",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "account_menu",
+      "label": "Customer account menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "Show country",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language",
+      "label": "Show language",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "wishlist_url",
+      "label": "Installed wishlist destination"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Wishlist label",
+      "default": "Wishlist"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Minimum desktop height",
+      "default": 100,
+      "min": 60,
+      "max": 200,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent",
+      "label": "Transparent on the homepage",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "transparent_ink",
+      "label": "Transparent ink",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_roses",
+      "label": "Use the ROSELUNE rose illustration",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "floral",
+      "label": "Custom floral decoration"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#fcf8f3"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#60383b"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Show border",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#d6b58c"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 12,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 6,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE header"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "class": "roselune-header-wrap",
+  "limit": 1
+}
+{% endschema %}

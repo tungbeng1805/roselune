@@ -1,0 +1,29 @@
+{% doc %}
+  @param {string} art - Selected bundled campaign
+  @param {boolean} [priority]
+{% enddoc %}
+{% liquid
+  case art
+    when 'garden'
+      assign file = 'roselune-garden.webp'
+      assign width = 1920
+      assign height = 640
+    when 'royal'
+      assign file = 'roselune-royal.webp'
+      assign width = 1280
+      assign height = 640
+    when 'mother'
+      assign file = 'roselune-mother.webp'
+      assign width = 1440
+      assign height = 576
+  endcase
+%}
+{% if file %}
+  <picture class="roselune-picture roselune-campaign-picture">
+    {% if art == 'garden' %}
+      <source media="(max-width: 749px)" srcset="{{ 'roselune-garden-mobile.webp' | asset_url }}" width="720" height="724">
+    {% endif %}
+    <img src="{{ file | asset_url }}" width="{{ width }}" height="{{ height }}" alt=""
+      {% if priority %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+  </picture>
+{% endif %}

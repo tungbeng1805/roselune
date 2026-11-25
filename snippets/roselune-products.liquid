@@ -1,0 +1,27 @@
+{% doc %}
+  @param {object} s - Collection or editorial section settings
+{% enddoc %}
+{% liquid
+  assign items = s.products
+  if items == blank
+    assign items = s.collection.products
+  endif
+  assign mobile_size = 100 | divided_by: s.mobile_columns
+  assign desktop_size = 100 | divided_by: s.columns
+  assign tablet_size = 100 | divided_by: s.tablet_columns
+  capture sizes
+    echo '(max-width: 749px) ' | append: mobile_size | append: 'vw, (max-width: 989px) ' | append: tablet_size | append: 'vw, ' | append: desktop_size | append: 'vw'
+  endcapture
+%}
+{% if items != blank %}
+  {% capture cards %}
+    {% for item in items limit: s.limit %}
+      <li>{% render 'roselune-product-card', item: item, s: s, sizes: sizes %}</li>
+    {% endfor %}
+  {% endcapture %}
+  <div class="roselune-products" style="--quick-add-display: flex; --quick-add-mobile-display: {% if settings.mobile_quick_add %}flex{% else %}none{% endif %}; --quick-add-mobile-opacity: 1">
+    {% render 'roselune-rail', items: cards, s: s %}
+  </div>
+{% elsif request.design_mode %}
+  <p class="roselune-editor-note">Choose a collection or select products to fill this showcase.</p>
+{% endif %}

@@ -38,7 +38,8 @@
         "divider_color": "{{ settings.color_palette.color2 }}",
         "padding-block-start": 15,
         "padding-block-end": 15
-      }
+      },
+      "disabled": true
     },
     "header_section": {
       "type": "header",
@@ -98,10 +99,33 @@
         "enable_transparent_header_home": false,
         "enable_transparent_header_product": false,
         "enable_transparent_header_collection": false
+      },
+      "disabled": true
+    },
+    "roselune-announcement": {
+      "type": "roselune-announcement-bar",
+      "settings": {},
+      "disabled": true
+    },
+    "roselune-header": {
+      "type": "roselune-header",
+      "settings": {
+        "nav_layout": "split",
+        "use_roses": true,
+        "logo_width": 165,
+        "mobile_logo_width": 100,
+        "tagline": "Where Little Dreams Bloom",
+        "padding": 4,
+        "mobile_padding": 2,
+        "background": "#fcf4ef",
+        "text_color": "#581e25",
+        "border_color": "#e5c8c1"
       }
     }
   },
   "order": [
+    "roselune-announcement",
+    "roselune-header",
     "header_announcements_9jGBFp",
     "header_section"
   ]

@@ -1,0 +1,314 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+{% assign brand = s.brand | default: shop.name %}
+{% assign logo = s.logo | default: settings.logo %}
+<div class="roselune-section roselune-footer roselune-flower-corners">
+  <div class="roselune-inner">
+    <div class="roselune-footer-columns">
+      <div class="roselune-footer-brand">
+        <a href="{{ routes.root_url }}" aria-label="{{ brand | escape }}">
+          {% if logo %}{% render 'roselune-picture', image: logo, sizes: '200px', max_width: 600, alt: brand %}
+          {% elsif s.bundled_logo %}{% render 'roselune-brand-mark', brand: brand, lazy: true %}
+          {% else %}<span class="roselune-wordmark">{{ brand | escape }}</span>{% endif %}
+        </a>
+        {% if s.descriptor != blank %}<p class="roselune-kicker">{{ s.descriptor | escape }}</p>{% endif %}
+        {% if s.tagline != blank %}<p class="roselune-script">{{ s.tagline | escape }}</p>{% endif %}
+        {% if s.description != blank %}<p>{{ s.description | escape }}</p>{% endif %}
+      </div>
+      {% for block in section.blocks %}
+        {% assign b = block.settings %}
+        {% if b.menu.links != blank or request.design_mode %}
+          {% capture column %}
+            <details {{ block.shopify_attributes }}>
+              <summary>{{ b.heading | default: b.menu.title | escape }}</summary>
+              {% if b.menu.links != blank %}
+                <nav class="details-content" aria-label="{{ b.heading | default: b.menu.title | escape }}">
+                  <ul>{% for link in b.menu.links %}
+                    <li><a href="{{ link.url | escape }}">{{ link.title | escape }}</a></li>
+                  {% endfor %}</ul>
+                </nav>
+              {% elsif request.design_mode %}<p>Choose the menu for this column.</p>{% endif %}
+            </details>
+          {% endcapture %}
+          {% render 'accordion-custom-component', children: column, class: 'roselune-footer-menu', disable_on_desktop: true, open_by_default_on_desktop: true %}
+        {% endif %}
+      {% endfor %}
+      {% if s.social_menu.links != blank or s.footer_signup %}
+        <div class="roselune-footer-connect">
+          {% if s.social_heading != blank %}<h2>{{ s.social_heading | escape }}</h2>{% endif %}
+          {% for link in s.social_menu.links %}<a href="{{ link.url | escape }}">{{ link.title | escape }}</a>{% endfor %}
+          {% if s.footer_signup %}{% render 'roselune-signup', label: s.subscribe_label %}{% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="roselune-footer-base">
+      <small>&copy; {{ 'now' | date: '%Y' }} {{ s.copyright | default: brand | escape }}</small>
+      {% if s.show_policies %}
+        {% for policy in shop.policies %}{% if policy != blank %}
+          <a href="{{ policy.url | escape }}">{{ policy.title | escape }}</a>
+        {% endif %}{% endfor %}
+      {% endif %}
+      {% render 'roselune-localization', s: s %}
+      {% if s.show_payments and shop.enabled_payment_types.size > 0 %}
+        <ul class="roselune-payments" aria-label="{{ 'blocks.payment_methods' | t }}">
+          {% for type in shop.enabled_payment_types %}<li>{{ type | payment_type_svg_tag }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% stylesheet %}
+  .roselune-footer-columns { display: grid; gap: 20px; align-items: start; }
+  .roselune-footer-columns > * { min-width: 0; }
+  .roselune-footer :is(ul, li) { padding: 0; margin: 0; list-style: none; }
+  .roselune-footer a { text-decoration: none; color: inherit; }
+  .roselune-footer a:hover { text-decoration: underline; }
+  .roselune-footer-brand, .roselune-footer-connect { display: grid; justify-items: start; gap: 10px; }
+  .roselune-footer-brand .roselune-picture { max-width: 200px; }
+  .roselune-footer-brand .roselune-brand-art { width: min(165px, 100%); }
+  .roselune-footer::before { display: none; }
+  .roselune-footer::after { bottom: 0; top: auto; transform: rotate(180deg); }
+  .roselune-footer-brand .roselune-wordmark { font-size: clamp(1.5rem, 2.5vw, 2.8rem); }
+  .roselune-footer-brand .roselune-script { font-size: 1.25rem; }
+  .roselune-footer-menu { display: block; border-block-end: 1px solid color-mix(in srgb, currentColor 25%, transparent); }
+  .roselune-footer-menu summary, .roselune-footer-connect h2 { padding-block: 12px; font: inherit; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+  .roselune-footer-menu a { display: inline-flex; align-items: center; min-height: 36px; }
+  .roselune-footer-base { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent); margin-top: 32px; padding-top: 20px; font-size: .85rem; }
+  .roselune-payments { display: flex; flex-wrap: wrap; gap: 6px; }
+  .roselune-payments svg { width: 38px; height: 24px; }
+  @media (min-width: 750px) {
+    .roselune-footer-columns { grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr)); gap: clamp(20px, 3vw, 54px); }
+    .roselune-footer-menu { border: 0; }
+    .roselune-footer-menu summary { list-style: none; cursor: default; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Boutique"
+    },
+    {
+      "type": "checkbox",
+      "id": "bundled_logo",
+      "label": "Use supplied ROSELUNE emblem",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "brand",
+      "label": "Brand",
+      "default": "ROSELUNE"
+    },
+    {
+      "type": "text",
+      "id": "descriptor",
+      "label": "Descriptor",
+      "default": "PRINCESS COUTURE"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Where Little Dreams Bloom"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "header",
+      "content": "Social and newsletter"
+    },
+    {
+      "type": "link_list",
+      "id": "social_menu",
+      "label": "Social links menu"
+    },
+    {
+      "type": "text",
+      "id": "social_heading",
+      "label": "Social heading",
+      "default": "Connect"
+    },
+    {
+      "type": "checkbox",
+      "id": "footer_signup",
+      "label": "Show newsletter form",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "subscribe_label",
+      "label": "Subscribe label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "header",
+      "content": "Footer information"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright name"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policies",
+      "label": "Show policies",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payments",
+      "label": "Show payments",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "Show country",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language",
+      "label": "Show language",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_roses",
+      "label": "Use the ROSELUNE rose illustration",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "floral",
+      "label": "Custom floral decoration"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#fcf8f3"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Button background",
+      "default": "#974158"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 64,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 36,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE footer",
+      "blocks": [
+        {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "SHOP"
+          }
+        },
+        {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "ABOUT"
+          }
+        },
+        {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "CUSTOMER CARE"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "footer"
+    ]
+  },
+  "limit": 1,
+  "blocks": [
+    {
+      "type": "roselune-menu",
+      "name": "Menu column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

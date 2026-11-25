@@ -1,0 +1,30 @@
+{% doc %}
+  @param {string} label - Submit button label
+{% enddoc %}
+{% assign form_id = 'roselune-signup-' | append: section.id %}
+{% assign default_label = 'actions.sign_up' | t %}
+{% form 'customer', id: form_id, class: 'roselune-signup' %}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+  <label for="{{ form_id }}-email" class="visually-hidden">{{ 'blocks.email_signup.label' | t }}</label>
+  <div class="roselune-signup-fields">
+    <input id="{{ form_id }}-email" type="email" name="contact[email]" autocomplete="email" autocorrect="off"
+      autocapitalize="off" required value="{{ form.email | escape }}" placeholder="{{ 'blocks.email_signup.placeholder' | t }}"
+      {% if form.errors %}aria-invalid="true" aria-describedby="{{ form_id }}-status"{% endif %}>
+    <button class="roselune-button" type="submit">{{ label | default: default_label | escape }}</button>
+  </div>
+  {% if form.errors %}
+    <div id="{{ form_id }}-status" role="alert">{{ form.errors | default_errors }}</div>
+  {% elsif form.posted_successfully? %}
+    <p id="{{ form_id }}-status" role="status">{{ 'blocks.email_signup.success' | t }}</p>
+  {% endif %}
+{% endform %}
+{% stylesheet %}
+  .roselune-signup { width: 100%; max-width: 36rem; }
+  .roselune-signup-fields { display: flex; flex-wrap: wrap; gap: 8px; }
+  .roselune-signup-fields input {
+    flex: 1 1 12rem; min-width: 0; width: 100%; min-height: 46px; padding: 10px 14px;
+    border: 1px solid currentColor; background: transparent; color: var(--roselune-ink); font: inherit;
+  }
+  .roselune-signup-fields input::placeholder { color: inherit; opacity: .8; }
+  .roselune-signup-fields button { flex: 1 0 auto; }
+{% endstylesheet %}

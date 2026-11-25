@@ -1,0 +1,146 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+<div class="roselune-section roselune-newsletter roselune-flower-corners">
+  <div class="roselune-inner roselune-newsletter-content roselune-newsletter--{{ s.composition }}">
+    {% render 'roselune-intro', s: s, center: true %}
+    {% render 'roselune-signup', label: s.subscribe_label %}
+  </div>
+</div>
+{% stylesheet %}
+  .roselune-newsletter { isolation: isolate; position: relative; }
+  .roselune-newsletter-content { display: grid; justify-items: center; align-items: center; gap: 24px; }
+  .roselune-newsletter::after { display: none; }
+  .roselune-newsletter::before { transform: scaleY(-1); }
+  @media (min-width: 990px) {
+    .roselune-newsletter--split { grid-template-columns: 1fr 1fr; max-width: 1160px; padding-inline: clamp(65px, 7vw, 100px); }
+    .roselune-newsletter--split .roselune-intro { gap: 6px; }
+    .roselune-newsletter--split .roselune-intro h2 { font-size: clamp(1.5rem, 2vw, 2rem); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join Our ROSELUNE Community"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Receive collection news and invitations from ROSELUNE."
+    },
+    {
+      "type": "text",
+      "id": "subscribe_label",
+      "label": "Subscribe label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_roses",
+      "label": "Use the ROSELUNE rose illustration",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "floral",
+      "label": "Decorative floral image"
+    },
+    {
+      "type": "select",
+      "id": "composition",
+      "label": "Desktop layout",
+      "default": "center",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "split",
+          "label": "Split"
+        }
+      ]
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#f4dfe2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Button background",
+      "default": "#974158"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 64,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 36,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE newsletter"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "index"
+    ]
+  }
+}
+{% endschema %}

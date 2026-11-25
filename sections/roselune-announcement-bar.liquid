@@ -1,0 +1,77 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+{% if s.message != blank %}
+  <div class="roselune-section roselune-announcement">
+    {% if s.url != blank %}<a href="{{ s.url | escape }}">{{ s.message | escape }}</a>{% else %}{{ s.message | escape }}{% endif %}
+  </div>
+{% endif %}
+{% stylesheet %}
+  .roselune-announcement { padding: var(--roselune-pad-mobile) 16px; text-align: center; font-size: .8rem; letter-spacing: .09em; }
+  @media (min-width: 750px) { .roselune-announcement { padding-block: var(--roselune-pad); } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE announcement",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Message",
+      "default": "Where Little Dreams Bloom"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Optional link"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#fcf8f3"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 8,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 6,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE announcement"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "limit": 1
+}
+{% endschema %}

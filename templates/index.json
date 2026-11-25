@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -89,7 +90,8 @@
         "reflection_opacity": 75,
         "padding-block-start": 100,
         "padding-block-end": 72
-      }
+      },
+      "disabled": true
     },
     "product_list_fa6P9H": {
       "type": "product-list",
@@ -275,10 +277,185 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 48,
         "padding-block-end": 48
+      },
+      "disabled": true
+    },
+    "roselune-hero": {
+      "type": "roselune-hero-video",
+      "settings": {
+        "button_url": "",
+        "campaign_art": "garden",
+        "panoramic": true,
+        "desktop_position": "start",
+        "mobile_position": "center",
+        "mobile_vertical": "end",
+        "alignment": "center",
+        "opacity": 20,
+        "overlay": "#341d1d",
+        "height": 600,
+        "mobile_height": 520,
+        "padding": 4,
+        "mobile_padding": 12,
+        "button_label": ""
+      }
+    },
+    "roselune-princess": {
+      "type": "roselune-collection-showcase",
+      "name": "Princess Dress",
+      "settings": {
+        "description": "Dreamy dresses for every little princess",
+        "use_roses": true,
+        "background": "#faedeb",
+        "heading_color": "#752b36",
+        "text_color": "#59333a",
+        "gap": 10,
+        "padding": 28,
+        "mobile_padding": 22,
+        "info_align": "center",
+        "show_options": true
+      }
+    },
+    "roselune-royal": {
+      "type": "roselune-collection-banner",
+      "name": "Royal Dress",
+      "settings": {
+        "campaign_art": "royal",
+        "description": "Elegant styles for special occasions",
+        "composition": "beside",
+        "opacity": 0,
+        "height": 300,
+        "mobile_height": 300,
+        "background": "#fcf3ee",
+        "heading_color": "#752b36",
+        "padding": 0,
+        "mobile_padding": 0,
+        "columns": 2,
+        "tablet_columns": 2,
+        "limit": 2
+      }
+    },
+    "roselune-mother": {
+      "type": "roselune-collection-banner",
+      "name": "Mother & Me",
+      "settings": {
+        "heading": "MOTHER & ME",
+        "description": "Matching looks for unforgettable moments",
+        "composition": "image_right",
+        "show_products": false,
+        "background": "#faebe9",
+        "campaign_art": "mother",
+        "opacity": 0,
+        "height": 300,
+        "mobile_height": 300,
+        "heading_color": "#752b36",
+        "padding": 0,
+        "mobile_padding": 0
+      }
+    },
+    "roselune-accessories": {
+      "type": "roselune-collection-showcase",
+      "name": "Accessories",
+      "settings": {
+        "heading": "ACCESSORIES",
+        "description": "The perfect finishing touches",
+        "display": "grid",
+        "intro_layout": "center",
+        "use_roses": true,
+        "background": "#fcf5f0",
+        "heading_color": "#752b36",
+        "columns": 6,
+        "ratio": "3 / 2",
+        "gap": 10,
+        "padding": 20,
+        "mobile_padding": 22
+      }
+    },
+    "roselune-community": {
+      "type": "roselune-community",
+      "settings": {
+        "intro_layout": "side",
+        "description": "From the ROSELUNE lookbook",
+        "display": "grid",
+        "columns": 5,
+        "ratio": "1 / 1",
+        "gap": 10,
+        "padding": 20,
+        "mobile_padding": 24,
+        "background": "#f8e8e7",
+        "heading_color": "#752b36"
+      },
+      "blocks": {
+        "roselune-look-1": {
+          "type": "roselune-post",
+          "settings": {
+            "lookbook_image": "1",
+            "alt": "Ivory dress with a bow in the rose garden"
+          }
+        },
+        "roselune-look-2": {
+          "type": "roselune-post",
+          "settings": {
+            "lookbook_image": "2",
+            "alt": "Lavender tulle dress among garden roses"
+          }
+        },
+        "roselune-look-3": {
+          "type": "roselune-post",
+          "settings": {
+            "lookbook_image": "3",
+            "alt": "Burgundy gown with an ivory sash"
+          }
+        },
+        "roselune-look-4": {
+          "type": "roselune-post",
+          "settings": {
+            "lookbook_image": "4",
+            "alt": "Pink ruffled gown on a garden path"
+          }
+        },
+        "roselune-look-5": {
+          "type": "roselune-post",
+          "settings": {
+            "lookbook_image": "5",
+            "alt": "Emerald dress framed by roses"
+          }
+        }
+      },
+      "block_order": [
+        "roselune-look-1",
+        "roselune-look-2",
+        "roselune-look-3",
+        "roselune-look-4",
+        "roselune-look-5"
+      ]
+    },
+    "roselune-feedback": {
+      "type": "roselune-testimonials",
+      "settings": {}
+    },
+    "roselune-newsletter": {
+      "type": "roselune-newsletter",
+      "settings": {
+        "heading": "JOIN OUR NEWSLETTER",
+        "description": "Be the first to know about new collections and inspirations.",
+        "composition": "split",
+        "use_roses": true,
+        "padding": 20,
+        "mobile_padding": 28,
+        "background": "#f2d6d6",
+        "heading_color": "#752b36"
       }
     }
   },
   "order": [
+    "roselune-hero",
+    "roselune-princess",
+    "roselune-royal",
+    "roselune-mother",
+    "roselune-accessories",
+    "roselune-community",
+    "roselune-feedback",
+    "roselune-newsletter",
     "hero_jVaWmY",
     "product_list_fa6P9H"
   ]

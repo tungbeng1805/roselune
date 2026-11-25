@@ -1,0 +1,49 @@
+{% doc %}
+  @param {string} items - List items rendered by the caller
+  @param {object} s - Section settings
+{% enddoc %}
+{% if s.display == 'carousel' %}
+  <script type="module" src="{{ 'roselune-carousel.js' | asset_url }}"></script>
+{% endif %}
+<roselune-rail class="roselune-rail roselune-rail--{{ s.display }}">
+  <ul class="roselune-track" role="list" id="roselune-track-{{ section.id }}" aria-label="{{ s.heading | escape }}"
+    {% if s.display == 'carousel' %}tabindex="0"{% endif %}>{{ items }}</ul>
+  {% if s.display == 'carousel' %}
+    <div class="roselune-controls" hidden>
+      {% if s.arrows %}
+        <button type="button" data-roselune-prev aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_previous' | t }}">&#8249;</button>
+      {% endif %}
+      {% if s.pagination %}<output aria-live="polite"></output>{% endif %}
+      {% if s.arrows %}
+        <button type="button" data-roselune-next aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_next' | t }}">&#8250;</button>
+      {% endif %}
+    </div>
+  {% endif %}
+</roselune-rail>
+{% stylesheet %}
+  .roselune-rail { display: block; min-width: 0; --roselune-count: var(--roselune-mobile); }
+  .roselune-track {
+    display: grid; grid-template-columns: repeat(var(--roselune-count), minmax(0, 1fr));
+    gap: var(--roselune-gap); list-style: none; padding: 4px; margin: -4px;
+  }
+  .roselune-track > li { min-width: 0; }
+  .roselune-rail--carousel .roselune-track {
+    grid-template-columns: none; grid-auto-flow: column;
+    padding-inline: 0; margin-inline: 0;
+    grid-auto-columns: calc((100% - (var(--roselune-count) - 1) * var(--roselune-gap)) / var(--roselune-count));
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-inline: contain;
+    scrollbar-width: thin; scrollbar-color: color-mix(in srgb, currentColor 35%, transparent) transparent;
+  }
+  .roselune-rail--carousel li { scroll-snap-align: start; }
+  .roselune-rail--carousel a:focus-visible { outline-offset: -2px; }
+  .roselune-controls { display: flex; gap: 12px; align-items: center; justify-content: flex-end; margin-top: 16px; }
+  .roselune-controls[hidden], .roselune-controls:empty { display: none; }
+  .roselune-controls button {
+    color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 50%;
+    width: 44px; height: 44px; font-size: 24px; line-height: 1; cursor: pointer;
+  }
+  .roselune-controls button:disabled { opacity: .35; }
+  [dir="rtl"] .roselune-controls button { transform: scaleX(-1); }
+  @media (min-width: 750px) { .roselune-rail { --roselune-count: var(--roselune-tablet); } }
+  @media (min-width: 990px) { .roselune-rail { --roselune-count: var(--roselune-columns); } }
+{% endstylesheet %}

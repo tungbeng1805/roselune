@@ -1,0 +1,62 @@
+{% doc %}
+  @param {object} s - Campaign settings
+  @param {boolean} [priority] - Prioritize the first visible hero poster
+  @param {string} [placeholder] - Shopify editorial illustration for unconfigured media
+{% enddoc %}
+{% liquid
+  assign desktop = s.image | default: s.video.preview_image
+  assign mobile = s.mobile_image | default: s.mobile_video.preview_image
+%}
+<roselune-film class="roselune-film" {% if s.autoplay %}data-roselune-autoplay{% endif %}
+  {% unless priority %}data-roselune-defer{% endunless %}>
+  {% render 'roselune-picture', image: desktop, mobile: mobile, priority: priority %}
+  {% if desktop == blank and mobile == blank %}
+    {% if s.campaign_art != blank and s.campaign_art != 'none' %}
+      {% render 'roselune-default-poster', art: s.campaign_art, priority: priority %}
+    {% else %}
+      <div class="roselune-campaign-placeholder" aria-hidden="true">
+        {{ placeholder | default: 'hero-apparel-1' | placeholder_svg_tag: 'roselune-placeholder' }}
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if s.video != blank or s.mobile_video != blank %}
+    <script type="module" src="{{ 'roselune-film.js' | asset_url }}"></script>
+    {% if s.video %}
+      <template data-roselune-desktop>
+        {{ s.video | video_tag: image_size: '1600x', poster: nil, preload: 'none', playsinline: true, muted: true, loop: s.loop, controls: false }}
+      </template>
+    {% endif %}
+    {% if s.mobile_video %}
+      <template data-roselune-mobile>
+        {{ s.mobile_video | video_tag: image_size: '750x', poster: nil, preload: 'none', playsinline: true, muted: true, loop: s.loop, controls: false }}
+      </template>
+    {% elsif s.mobile_image %}
+      <template data-roselune-mobile></template>
+    {% endif %}
+    <div class="roselune-film-controls" hidden>
+      <button type="button" data-roselune-play {% unless s.show_play %}hidden{% endunless %}
+        data-play="{{ 'accessibility.play_video' | t }}" data-pause="{{ 'accessibility.pause_video' | t }}">{{ 'accessibility.play_video' | t }}</button>
+      {% if s.show_mute %}
+        <button type="button" data-roselune-audio aria-pressed="false">{{ s.sound_label | default: 'Sound' | escape }}</button>
+      {% endif %}
+    </div>
+  {% endif %}
+</roselune-film>
+{% stylesheet %}
+  .roselune-film { display: block; position: absolute; inset: 0; }
+  .roselune-campaign-placeholder { position: absolute; inset: 0; overflow: hidden; background: var(--roselune-bg); }
+  .roselune-campaign-placeholder svg { display: block; width: 100%; height: 100%; opacity: .44; filter: grayscale(1); mix-blend-mode: luminosity; }
+  .roselune-film .roselune-picture, .roselune-film img, .roselune-film video {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .roselune-film video { position: absolute; inset: 0; object-position: var(--roselune-position, center); }
+  .roselune-film .roselune-campaign-picture img { object-position: center 18%; }
+  .roselune-film video:not([controls]):not([data-roselune-visible]) { opacity: 0; }
+  .roselune-film-controls {
+    position: absolute; inset-inline-end: clamp(12px, 3vw, 42px); bottom: 12px;
+    z-index: 3; display: flex; gap: 5px;
+  }
+  .roselune-film-controls button { min-height: 44px; padding-inline: 12px; border: 0; background: #352326df; color: white; cursor: pointer; }
+  .roselune-film-controls [aria-pressed="true"] { text-decoration: underline; }
+  .roselune-film-controls[hidden], .roselune-film-controls button[hidden] { display: none; }
+{% endstylesheet %}

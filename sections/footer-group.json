@@ -141,7 +141,8 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 30,
         "padding-block-end": 30
-      }
+      },
+      "disabled": true
     },
     "footer_utilities_jLGE8U": {
       "type": "footer-utilities",
@@ -189,10 +190,50 @@
         "background_color": "{{ settings.color_palette.background }}",
         "padding-block-start": 20,
         "padding-block-end": 48
-      }
+      },
+      "disabled": true
+    },
+    "roselune-footer": {
+      "type": "roselune-footer",
+      "settings": {
+        "use_roses": true,
+        "background": "#fcf4ef",
+        "text_color": "#581e25",
+        "heading_color": "#581e25",
+        "descriptor": "",
+        "tagline": "",
+        "padding": 28,
+        "mobile_padding": 22
+      },
+      "blocks": {
+        "roselune-shop": {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "SHOP"
+          }
+        },
+        "roselune-about": {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "ABOUT"
+          }
+        },
+        "roselune-care": {
+          "type": "roselune-menu",
+          "settings": {
+            "heading": "CUSTOMER CARE"
+          }
+        }
+      },
+      "block_order": [
+        "roselune-shop",
+        "roselune-about",
+        "roselune-care"
+      ]
     }
   },
   "order": [
+    "roselune-footer",
     "footer_m9NzUG",
     "footer_utilities_jLGE8U"
   ]

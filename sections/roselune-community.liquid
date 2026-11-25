@@ -1,0 +1,353 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+{% capture cards %}
+  {% for block in section.blocks %}
+    {% assign b = block.settings %}
+    {% assign look = b.lookbook_image %}
+    {% if look == 'none' %}{% assign look = nil %}{% endif %}
+    {% if b.image != blank or b.video != blank or look != blank or request.design_mode %}
+      <li {{ block.shopify_attributes }}>
+        <figure class="roselune-gallery-card">
+          <div class="roselune-gallery-art">
+            {% if b.video %}
+              {{ b.video | video_tag: image_size: '750x', preload: 'none', controls: true, playsinline: true, aria-label: b.alt }}
+            {% elsif b.image %}
+              {% render 'roselune-picture', image: b.image, sizes: '(max-width: 749px) 100vw, 33vw', max_width: 1200, alt: b.alt %}
+            {% elsif look != blank %}
+              {% assign look_file = 'roselune-look-' | append: look | append: '.webp' %}
+              <img src="{{ look_file | asset_url }}" width="136" height="113" loading="lazy" alt="{{ b.alt | escape }}">
+            {% else %}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'roselune-placeholder' }}
+            {% endif %}
+          </div>
+          <figcaption>
+            {% if b.social_url != blank %}<a href="{{ b.social_url | escape }}">{{ b.customer | default: s.social_label | escape }}</a>
+            {% elsif b.customer != blank %}<strong>{{ b.customer | escape }}</strong>{% endif %}
+            {% if b.caption != blank %}<p>{{ b.caption | escape }}</p>{% endif %}
+            {% if b.product != blank %}<a href="{{ b.product.url | escape }}">{{ b.product.title | escape }}</a>{% endif %}
+          </figcaption>
+        </figure>
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endcapture %}
+{% assign cards = cards | strip %}
+{% if cards != blank or request.design_mode or s.button_url != blank %}
+  <div class="roselune-section"><div class="roselune-inner roselune-gallery roselune-gallery--{{ s.intro_layout }}">
+    {% render 'roselune-intro', s: s, center: true %}
+    {% if cards != blank %}{% render 'roselune-rail', items: cards, s: s %}
+    {% elsif request.design_mode %}<p class="roselune-editor-note">Add a gallery item and choose a customer photo or film.</p>{% endif %}
+  </div></div>
+{% endif %}
+{% stylesheet %}
+  .roselune-gallery { display: grid; gap: clamp(22px, 3vw, 46px); }
+  .roselune-gallery-art { aspect-ratio: var(--roselune-ratio); }
+  .roselune-gallery-art :is(.roselune-picture, img, video) { width: 100%; height: 100%; object-fit: cover; }
+  .roselune-gallery-card figcaption { padding-block: 10px; display: grid; gap: 4px; }
+  .roselune-gallery-card figcaption:not(:has(*)) { display: none; }
+  @media (min-width: 990px) {
+    .roselune-gallery--side { grid-template-columns: minmax(180px, 1fr) minmax(0, 3.8fr); align-items: center; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE community",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "OUR COMMUNITY"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A world of little dreams in ROSELUNE."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Follow ROSELUNE"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Social profile URL"
+    },
+    {
+      "type": "text",
+      "id": "social_label",
+      "label": "Post link fallback",
+      "default": "View post"
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "select",
+      "id": "intro_layout",
+      "label": "Heading position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Above gallery"
+        },
+        {
+          "value": "side",
+          "label": "Beside gallery"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "default": 4,
+      "min": 1,
+      "max": 6,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "tablet_columns",
+      "label": "Tablet columns",
+      "default": 3,
+      "min": 1,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Item gap",
+      "default": 18,
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display mode",
+      "default": "carousel",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "arrows",
+      "label": "Show arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pagination",
+      "label": "Show pagination",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Image aspect ratio",
+      "default": "4 / 5",
+      "options": [
+        {
+          "value": "3 / 4",
+          "label": "3 / 4"
+        },
+        {
+          "value": "4 / 5",
+          "label": "4 / 5"
+        },
+        {
+          "value": "1 / 1",
+          "label": "1 / 1"
+        },
+        {
+          "value": "3 / 2",
+          "label": "3 / 2"
+        }
+      ]
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "playfair_display_n4"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#fcf8f3"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#60383b"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Button background",
+      "default": "#974158"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 64,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 36,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE community"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "index"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "roselune-post",
+      "name": "Gallery item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "lookbook_image",
+          "label": "Bundled editorial photo",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Garden portrait 1"
+            },
+            {
+              "value": "2",
+              "label": "Garden portrait 2"
+            },
+            {
+              "value": "3",
+              "label": "Garden portrait 3"
+            },
+            {
+              "value": "4",
+              "label": "Garden portrait 4"
+            },
+            {
+              "value": "5",
+              "label": "Garden portrait 5"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "text",
+          "id": "customer",
+          "label": "Customer name or username"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Media description"
+        },
+        {
+          "type": "url",
+          "id": "social_url",
+          "label": "Social url"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

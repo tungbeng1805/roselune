@@ -1,0 +1,12 @@
+{% doc %}
+  @param {object} s - Section settings
+  @param {boolean} [center]
+{% enddoc %}
+{% assign url = s.button_url | default: s.collection.url %}
+<div class="roselune-intro{% if center %} roselune-intro--center{% endif %}">
+  {% if s.heading != blank %}<h2>{{ s.heading | escape }}</h2>{% endif %}
+  {% if s.description != blank %}<p>{{ s.description | escape }}</p>{% endif %}
+  {% if s.button_label != blank and url != blank %}
+    <a class="roselune-button" href="{{ url | escape }}">{{ s.button_label | escape }}</a>
+  {% endif %}
+</div>
