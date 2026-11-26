@@ -32,8 +32,9 @@
     padding-inline: 0; margin-inline: 0;
     grid-auto-columns: calc((100% - (var(--roselune-count) - 1) * var(--roselune-gap)) / var(--roselune-count));
     overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-inline: contain;
-    scrollbar-width: thin; scrollbar-color: color-mix(in srgb, currentColor 35%, transparent) transparent;
+    scrollbar-width: none;
   }
+  .roselune-rail--carousel .roselune-track::-webkit-scrollbar { display: none; }
   .roselune-rail--carousel li { scroll-snap-align: start; }
   .roselune-rail--carousel a:focus-visible { outline-offset: -2px; }
   .roselune-controls { display: flex; gap: 12px; align-items: center; justify-content: flex-end; margin-top: 16px; }

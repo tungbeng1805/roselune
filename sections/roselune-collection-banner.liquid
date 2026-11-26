@@ -53,8 +53,8 @@
 </div>
 {% stylesheet %}
   .roselune-editorial { padding-block: var(--roselune-pad-mobile); }
-  .roselune-editorial-banner { display: grid; isolation: isolate; position: relative; }
-  .roselune-editorial-art { position: relative; min-height: var(--roselune-mobile-height); background: color-mix(in srgb, var(--roselune-ink) 10%, var(--roselune-bg)); }
+  .roselune-editorial-banner { display: grid; grid-template-columns: minmax(0, 1fr); isolation: isolate; position: relative; }
+  .roselune-editorial-art { position: relative; width: 100%; min-height: var(--roselune-mobile-height); background: color-mix(in srgb, var(--roselune-ink) 10%, var(--roselune-bg)); }
   .roselune-editorial-art::after { content: ''; position: absolute; inset: 0; background: var(--roselune-overlay-fill); opacity: var(--roselune-opacity); pointer-events: none; }
   .roselune-editorial-art--natural { min-height: 0; aspect-ratio: var(--roselune-art-ratio); }
   .roselune-editorial-art--framed { border: 1px solid color-mix(in srgb, var(--roselune-heading) 26%, transparent); padding: 8px; background: transparent; }
@@ -66,14 +66,15 @@
   .roselune-editorial--banner :is(.roselune-editorial-art, .roselune-editorial-copy) { grid-area: 1 / 1; }
   .roselune-editorial--banner .roselune-editorial-copy { z-index: 1; pointer-events: none; padding-block: 74px; color: var(--roselune-banner-ink); --roselune-heading: var(--roselune-banner-ink); }
   .roselune-editorial--story_banner :is(.roselune-editorial-art, .roselune-editorial-copy) { grid-area: 1 / 1; }
-  .roselune-editorial--story_banner .roselune-editorial-art { height: var(--roselune-mobile-height); min-height: 0; overflow: hidden; }
-  .roselune-editorial--story_banner .roselune-editorial-art :is(.roselune-picture, img) { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
+  .roselune-editorial--story_banner .roselune-editorial-art { height: auto; aspect-ratio: 4 / 5; min-height: 420px; overflow: hidden; }
+  .roselune-editorial--story_banner .roselune-editorial-art :is(.roselune-picture, img) { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
   .roselune-editorial--story_banner .roselune-editorial-art::after {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 28%, rgba(255, 255, 255, 0) 54%);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0) 58%);
     opacity: 1;
   }
-  .roselune-editorial--story_banner .roselune-editorial-copy { z-index: 1; pointer-events: none; max-width: 520px; padding-inline: clamp(24px, 5vw, 76px); }
-  .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: start; justify-items: start; gap: 10px; }
+  .roselune-editorial--story_banner .roselune-editorial-copy { z-index: 1; pointer-events: none; align-self: end; width: 100%; max-width: none; padding: 48px 20px 24px; }
+  .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: center; justify-items: center; gap: 8px; }
+  .roselune-editorial--story_banner .roselune-button { background: rgba(255, 255, 255, 0.72); }
   .roselune-editorial--story_banner .roselune-editorial-products { padding-bottom: 48px; }
   .roselune-editorial-copy a { pointer-events: auto; }
   .roselune-editorial-products { min-width: 0; max-width: var(--roselune-width); margin-inline: auto; padding: 28px clamp(16px, 4vw, 76px) 0; }
@@ -105,7 +106,14 @@
   @media (min-width: 750px) {
     .roselune-editorial { padding-block: var(--roselune-pad); }
     .roselune-editorial-art { min-height: var(--roselune-height); aspect-ratio: auto; }
-    .roselune-editorial--story_banner .roselune-editorial-art { height: var(--roselune-height); }
+    .roselune-editorial--story_banner .roselune-editorial-art { height: var(--roselune-height); aspect-ratio: auto; min-height: 0; }
+    .roselune-editorial--story_banner .roselune-editorial-art :is(.roselune-picture, img) { object-position: center 22%; }
+    .roselune-editorial--story_banner .roselune-editorial-art::after {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 28%, rgba(255, 255, 255, 0) 54%);
+    }
+    .roselune-editorial--story_banner .roselune-editorial-copy { align-self: center; max-width: 520px; padding: clamp(32px, 5vw, 94px) clamp(24px, 5vw, 76px); }
+    .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: start; justify-items: start; gap: 10px; }
+    .roselune-editorial--story_banner .roselune-button { background: transparent; }
     .roselune-editorial:not(.roselune-editorial--banner, .roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped, .roselune-editorial--story_banner) .roselune-editorial-banner { grid-template-columns: 1.2fr 1fr; }
     .roselune-editorial--image_right .roselune-editorial-art { order: 1; }
   }
