@@ -10,7 +10,7 @@
     --roselune-art-ratio: {{ mobile_art.aspect_ratio | default: 1.15 }};
   }
 {% endstyle %}
-<div class="roselune-section roselune-editorial roselune-editorial--{{ s.composition }}">
+<div{% if s.heading != blank %} id="{{ s.heading | handleize }}"{% endif %} class="roselune-section roselune-editorial roselune-editorial--{{ s.composition }}">
   {% if s.composition == 'editorial_split' or s.composition == 'editorial_split_flipped' %}
     <div class="roselune-inner roselune-editorial-split{% if s.composition == 'editorial_split_flipped' %} roselune-editorial-split--flipped{% endif %}">
       <div class="roselune-editorial-art roselune-editorial-art--rounded{% if s.natural_mobile %} roselune-editorial-art--natural{% endif %}">
@@ -75,7 +75,7 @@
   .roselune-editorial--story_banner .roselune-editorial-copy { z-index: 1; pointer-events: none; align-self: end; width: 100%; max-width: none; padding: 48px 20px 24px; }
   .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: center; justify-items: center; gap: 8px; }
   .roselune-editorial--story_banner .roselune-button { background: rgba(255, 255, 255, 0.72); }
-  .roselune-editorial--story_banner .roselune-editorial-products { padding-bottom: 48px; }
+  .roselune-editorial--story_banner .roselune-editorial-products { padding-block: 36px 48px; }
   .roselune-editorial-copy a { pointer-events: auto; }
   .roselune-editorial-products { min-width: 0; max-width: var(--roselune-width); margin-inline: auto; padding: 28px clamp(16px, 4vw, 76px) 0; }
   .roselune-editorial-products:not(:has(*)) { display: none; }
@@ -114,6 +114,7 @@
     .roselune-editorial--story_banner .roselune-editorial-copy { align-self: center; max-width: 520px; padding: clamp(32px, 5vw, 94px) clamp(24px, 5vw, 76px); }
     .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: start; justify-items: start; gap: 10px; }
     .roselune-editorial--story_banner .roselune-button { background: transparent; }
+    .roselune-editorial--story_banner .roselune-editorial-products { padding-block: 48px 56px; }
     .roselune-editorial:not(.roselune-editorial--banner, .roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped, .roselune-editorial--story_banner) .roselune-editorial-banner { grid-template-columns: 1.2fr 1fr; }
     .roselune-editorial--image_right .roselune-editorial-art { order: 1; }
   }

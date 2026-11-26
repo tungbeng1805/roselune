@@ -202,8 +202,20 @@
         "heading_color": "#581e25",
         "descriptor": "",
         "tagline": "",
-        "padding": 28,
-        "mobile_padding": 22
+        "story_heading": "Brand Story",
+        "description": "Founded with a devotion to childhood wonder, ROSELUNE crafts heirloom-quality princess couture in silk, French tulle, and delicate hand-sewn florals — where little dreams bloom.",
+        "story_url": "/pages/about",
+        "story_link_label": "Read our story",
+        "social_heading": "Connect",
+        "instagram_url": "https://www.instagram.com/",
+        "facebook_url": "https://www.facebook.com/",
+        "tiktok_url": "https://www.tiktok.com/",
+        "footer_signup": true,
+        "subscribe_label": "Subscribe",
+        "show_account_link": true,
+        "account_label": "Sign in / Create account",
+        "padding": 36,
+        "mobile_padding": 24
       },
       "blocks": {
         "roselune-shop": {

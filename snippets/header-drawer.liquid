@@ -6,6 +6,8 @@
   @param {string} [data_header_drawer_type] - The type of header drawer to render
   @param {object} [block] - The block that can be used to provide settings
   @param {object} [section] - The section that can be used to provide settings
+  @param {boolean} [roselune_style] - Enables ROSELUNE drawer styling
+  @param {boolean} [use_product_group_fallback] - Falls back to ROSELUNE product group links when menu is unmodified starter
 
   @example
   {% render 'header-drawer', linklist: section.settings.menu, class: 'header-drawer--mobile' %}
@@ -124,7 +126,9 @@
           {%- comment -%}
             Handle menus with fewer than 3 levels of links
           {%- endcomment -%}
-          {% if linklist.levels < 3 %}
+          {% if use_product_group_fallback %}
+            {% render 'roselune-product-groups', mode: 'drawer' %}
+          {% elsif linklist.levels < 3 %}
             {% assign first_accordion_open = false %}
             {% assign animation_index = 0 %}
             {%- for link in linklist.links -%}

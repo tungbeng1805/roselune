@@ -11,17 +11,21 @@
   {% if s.display == 'carousel' %}
     <div class="roselune-controls" hidden>
       {% if s.arrows %}
-        <button type="button" data-roselune-prev aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_previous' | t }}">&#8249;</button>
+        <button type="button" data-roselune-prev aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_previous' | t }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
       {% endif %}
       {% if s.pagination %}<output aria-live="polite"></output>{% endif %}
       {% if s.arrows %}
-        <button type="button" data-roselune-next aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_next' | t }}">&#8250;</button>
+        <button type="button" data-roselune-next aria-controls="roselune-track-{{ section.id }}" aria-label="{{ 'accessibility.slideshow_next' | t }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       {% endif %}
     </div>
   {% endif %}
 </roselune-rail>
 {% stylesheet %}
-  .roselune-rail { display: block; min-width: 0; --roselune-count: var(--roselune-mobile); }
+  .roselune-rail { position: relative; display: block; min-width: 0; --roselune-count: var(--roselune-mobile); }
   .roselune-track {
     display: grid; grid-template-columns: repeat(var(--roselune-count), minmax(0, 1fr));
     gap: var(--roselune-gap); list-style: none; padding: 4px; margin: -4px;
@@ -37,14 +41,29 @@
   .roselune-rail--carousel .roselune-track::-webkit-scrollbar { display: none; }
   .roselune-rail--carousel li { scroll-snap-align: start; }
   .roselune-rail--carousel a:focus-visible { outline-offset: -2px; }
-  .roselune-controls { display: flex; gap: 12px; align-items: center; justify-content: flex-end; margin-top: 16px; }
   .roselune-controls[hidden], .roselune-controls:empty { display: none; }
-  .roselune-controls button {
-    color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 50%;
-    width: 44px; height: 44px; font-size: 24px; line-height: 1; cursor: pointer;
+  .roselune-controls :is([data-roselune-prev], [data-roselune-next]) {
+    position: absolute; top: 40%; transform: translateY(-50%); z-index: 2;
+    width: 44px; height: 44px; padding: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--roselune-heading, #752b36);
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+    box-shadow: 0 4px 14px rgba(52, 29, 29, 0.12);
+    cursor: pointer; transition: transform .2s ease, background-color .2s ease, opacity .2s ease;
   }
-  .roselune-controls button:disabled { opacity: .35; }
-  [dir="rtl"] .roselune-controls button { transform: scaleX(-1); }
-  @media (min-width: 750px) { .roselune-rail { --roselune-count: var(--roselune-tablet); } }
+  .roselune-controls [data-roselune-prev] { inset-inline-start: 6px; }
+  .roselune-controls [data-roselune-next] { inset-inline-end: 6px; }
+  .roselune-controls :is([data-roselune-prev], [data-roselune-next]):hover:not(:disabled) {
+    background: #ffffff; border-color: currentColor; transform: translateY(-50%) scale(1.06);
+  }
+  .roselune-controls button:disabled { opacity: .32; cursor: default; }
+  .roselune-controls output { display: block; text-align: center; margin-top: 14px; font-size: .82rem; letter-spacing: .12em; }
+  [dir="rtl"] .roselune-controls button svg { transform: scaleX(-1); }
+  @media (min-width: 750px) {
+    .roselune-rail { --roselune-count: var(--roselune-tablet); }
+    .roselune-controls [data-roselune-prev] { inset-inline-start: -22px; }
+    .roselune-controls [data-roselune-next] { inset-inline-end: -22px; }
+  }
   @media (min-width: 990px) { .roselune-rail { --roselune-count: var(--roselune-columns); } }
 {% endstylesheet %}

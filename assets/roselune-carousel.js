@@ -10,6 +10,10 @@ class RoseluneRail extends HTMLElement {
     this.output = this.controls.querySelector('output');
     this.prev?.addEventListener('click', () => this.move(-1), options);
     this.next?.addEventListener('click', () => this.move(1), options);
+    this.track.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft') { event.preventDefault(); this.move(-1); }
+      else if (event.key === 'ArrowRight') { event.preventDefault(); this.move(1); }
+    }, options);
     this.track.addEventListener('scroll', () => this.update(), { ...options, passive: true });
     this.addEventListener('shopify:block:select', event => {
       event.target.closest('li')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });

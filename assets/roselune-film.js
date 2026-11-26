@@ -48,6 +48,14 @@ class RoseluneFilm extends HTMLElement {
     const video = sourceVideo.cloneNode(true);
     this.video = video;
     video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    if (this.hasAttribute('data-roselune-autoplay') && !this.reduced.matches) {
+      video.autoplay = true;
+      video.setAttribute('autoplay', '');
+    }
     video.controls = !this.showPlay;
     this.playButton.textContent = this.playButton.dataset.play;
     this.audioButton?.setAttribute('aria-pressed', 'false');

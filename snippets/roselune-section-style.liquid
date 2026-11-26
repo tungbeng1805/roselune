@@ -42,6 +42,8 @@
     font-family: var(--font-body--family, sans-serif);
     overflow-wrap: anywhere;
   }
+  .roselune-section[id] { scroll-margin-top: var(--header-height, 100px); }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   .roselune-section :is(h1, h2, h3, p, figure, blockquote) { margin: 0; }
   .roselune-section :is(h1, h2, h3), .roselune-wordmark {
     color: var(--roselune-heading);

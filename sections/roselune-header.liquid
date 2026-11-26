@@ -2,8 +2,20 @@
 {% render 'roselune-section-style' %}
 {% liquid
   assign logo = s.logo | default: settings.logo
-  assign menu_size = s.menu.links.size
-  assign menu_half = menu_size | plus: 1 | divided_by: 2
+  assign menu_titles = ''
+  for link in s.menu.links
+    assign title_key = link.title | downcase | strip
+    assign menu_titles = menu_titles | append: '|' | append: title_key
+  endfor
+  assign use_product_group_fallback = false
+  if s.menu.links == blank or menu_titles == '|home|catalog|contact' or menu_titles == '|home|catalog'
+    assign use_product_group_fallback = true
+  endif
+  assign nav_count = s.menu.links.size
+  if use_product_group_fallback
+    assign nav_count = 4
+  endif
+  assign menu_half = nav_count | plus: 1 | divided_by: 2
   assign brand = s.brand | default: shop.name
   assign logo_sizes = '(max-width: 749px) ' | append: s.mobile_logo_width | append: 'px, ' | append: s.logo_width | append: 'px'
 %}
@@ -21,20 +33,22 @@
    "url":{{ request.origin | json }}}
 </script>
 <script type="module" src="{{ 'roselune-header.js' | asset_url }}"></script>
-<roselune-header id="header-component" class="roselune-section roselune-header roselune-flower-corners"
+<roselune-header id="header-component" class="roselune-section roselune-header{% if s.use_roses or s.floral != blank %} roselune-flower-corners{% endif %}"
   {% if s.sticky %}data-roselune-sticky{% endif %}
   {% if s.transparent and request.page_type == 'index' %}data-roselune-transparent{% endif %}
   {% unless s.show_account %}data-roselune-hide-account{% endunless %}
   {% unless s.show_cart %}data-roselune-hide-cart{% endunless %}>
   <header>
     <div class="roselune-mast roselune-mast--{{ s.nav_layout }}">
-      <div class="roselune-header-tools">
+      <div class="roselune-header-tools roselune-header-tools--start">
         <div class="roselune-mobile-menu">
-          {% render 'header-drawer', linklist: s.menu, section: section, data_header_drawer_type: 'mobile-drawer', roselune_style: true %}
+          {% render 'header-drawer', linklist: s.menu, section: section, data_header_drawer_type: 'mobile-drawer', roselune_style: true, use_product_group_fallback: use_product_group_fallback %}
         </div>
         {% if s.show_search %}<div class="roselune-search-start">{% render 'search', display_style: 'icon' %}</div>{% endif %}
-        {% if s.nav_layout == 'split' %}{% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_half %}{% endif %}
-        <div class="roselune-region">{% render 'roselune-localization', s: s %}</div>
+        {% if s.nav_layout == 'split' %}{% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_half, use_product_group_fallback: use_product_group_fallback %}{% endif %}
+        {% unless s.nav_layout == 'left' %}
+          <div class="roselune-region">{% render 'roselune-localization', s: s %}</div>
+        {% endunless %}
       </div>
       <a class="roselune-brand" href="{{ routes.root_url }}" aria-label="{{ brand | escape }}">
         {% if logo != blank or s.mobile_logo != blank %}
@@ -42,32 +56,46 @@
         {% elsif s.bundled_logo %}{% render 'roselune-brand-mark', brand: brand %}
         {% else %}<span class="roselune-wordmark">{{ brand | escape }}</span>{% endif %}
       </a>
-      <div class="roselune-header-tools roselune-actions">
-        {% if s.nav_layout == 'split' %}
-          {% render 'roselune-navigation', menu: s.menu, start: menu_half, count: menu_size %}
-          {% if s.show_search %}<div class="roselune-search-end">{% render 'search', display_style: 'icon' %}</div>{% endif %}
+      {% if s.nav_layout == 'left' %}
+        {% render 'roselune-navigation', menu: s.menu, start: 0, count: nav_count, use_product_group_fallback: use_product_group_fallback %}
+      {% endif %}
+      <div class="{% if s.nav_layout == 'left' %}roselune-mast-end{% else %}roselune-mast-end--inline{% endif %}">
+        <div class="roselune-header-tools roselune-actions">
+          {% if s.nav_layout == 'left' %}
+            <div class="roselune-region">{% render 'roselune-localization', s: s %}</div>
+          {% endif %}
+          {% if s.nav_layout == 'split' %}
+            {% render 'roselune-navigation', menu: s.menu, start: menu_half, count: nav_count, use_product_group_fallback: use_product_group_fallback %}
+          {% endif %}
+          {% if s.nav_layout == 'split' or s.nav_layout == 'left' %}
+            {% if s.show_search %}<div class="roselune-search-end">{% render 'search', display_style: 'icon' %}</div>{% endif %}
+          {% endif %}
+          {% if s.show_wishlist and s.wishlist_url != blank %}
+            <a class="roselune-wishlist" href="{{ s.wishlist_url | escape }}" aria-label="{{ s.wishlist_label | escape }}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21 3.2 12.1C-2.2 6.5 5.8-.8 12 6.1c6.2-6.9 14.2.4 8.8 6z"/></svg>
+            </a>
+          {% endif %}
+          {% render 'header-actions', section: section, display_style: 'icon', customer_account_menu: s.account_menu.handle %}
+        </div>
+        {% if s.nav_layout == 'left' and s.tagline != blank %}
+          <p class="roselune-header-tagline">{{ s.tagline | escape }}</p>
         {% endif %}
-        {% if s.show_wishlist and s.wishlist_url != blank %}
-          <a class="roselune-wishlist" href="{{ s.wishlist_url | escape }}" aria-label="{{ s.wishlist_label | escape }}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 21 3.2 12.1C-2.2 6.5 5.8-.8 12 6.1c6.2-6.9 14.2.4 8.8 6z"/></svg>
-          </a>
-        {% endif %}
-        {% render 'header-actions', section: section, display_style: 'icon', customer_account_menu: s.account_menu.handle %}
       </div>
     </div>
-    {% if s.nav_layout != 'split' %}
-      {% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_size %}
+    {% if s.nav_layout == 'stacked' %}
+      {% render 'roselune-navigation', menu: s.menu, start: 0, count: nav_count, use_product_group_fallback: use_product_group_fallback %}
     {% endif %}
-    {% if s.tagline != blank %}<p class="roselune-header-tagline">{{ s.tagline | escape }}</p>{% endif %}
+    {% if s.nav_layout != 'left' and s.tagline != blank %}<p class="roselune-header-tagline">{{ s.tagline | escape }}</p>{% endif %}
   </header>
 </roselune-header>
 {% stylesheet %}
   .roselune-header-tagline {
-    display: flex; align-items: center; justify-content: center; gap: 12px; text-align: center;
+    grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; text-align: center;
     padding: 0 12px 10px; font: italic clamp(.85rem, 1.35vw, 1.3rem)/1.35 'Snell Roundhand', 'Segoe Script', var(--roselune-font);
   }
   .roselune-header-tagline::before, .roselune-header-tagline::after { content: ''; width: 2.5em; height: 1px; background: currentColor; opacity: .45; }
   .roselune-search-end { display: none; }
+  .roselune-mast-end, .roselune-mast-end--inline { display: contents; }
   .roselune-header-wrap { z-index: var(--layer-menu-drawer, 9); position: relative; flex: none; }
   #header-group:has(.roselune-header[data-roselune-sticky]) { display: contents; }
   .roselune-header-wrap:has([data-roselune-sticky]) { position: sticky; top: -1px; }
@@ -113,6 +141,19 @@
     .roselune-mast--split .roselune-nav { border: 0; min-width: 0; color: var(--roselune-ink); }
     .roselune-mast--split .roselune-nav > ul { padding: 0; gap: 0 clamp(12px, 1.8vw, 32px); }
     .roselune-mast--split .roselune-nav > ul > li > a { font-family: var(--roselune-font); text-transform: none; letter-spacing: .015em; font-size: clamp(.85rem, 1.2vw, 1.1rem); }
+    .roselune-mast--left { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: clamp(18px, 2.8vw, 52px); }
+    .roselune-mast--left .roselune-header-tools--start { display: none; }
+    .roselune-mast--left .roselune-brand { width: min(22vw, var(--roselune-logo)); justify-self: start; text-align: start; }
+    .roselune-mast--left .roselune-nav { border: 0; min-width: 0; color: var(--roselune-ink); }
+    .roselune-mast--left .roselune-nav > ul { justify-content: flex-start; padding-inline: 0; gap: 4px clamp(14px, 2vw, 34px); }
+    .roselune-mast--left .roselune-nav > ul > li > a { font-family: var(--roselune-font); text-transform: none; letter-spacing: .02em; font-size: clamp(.88rem, 1.1vw, 1.05rem); white-space: nowrap; }
+    .roselune-mast--left .roselune-mast-end { display: grid; justify-items: end; align-content: center; gap: 2px; }
+    .roselune-mast--left .roselune-actions { justify-content: flex-end; margin-inline-end: -10px; }
+    .roselune-mast--left .roselune-search-end { display: block; }
+    .roselune-mast--left .roselune-region form { inset-inline: auto 0; }
+    .roselune-mast--left .roselune-header-tagline { grid-column: auto; justify-content: flex-end; text-align: right; padding: 0; font-size: clamp(.88rem, 1.15vw, 1.15rem); white-space: nowrap; gap: 10px; }
+    .roselune-mast--left .roselune-header-tagline::before { width: 1.6em; }
+    .roselune-mast--left .roselune-header-tagline::after { display: none; }
     .roselune-nav li:last-child .roselune-dropdown { inset-inline: auto 0; }
     .roselune-dropdown ul { padding-inline-start: 14px; border-inline-start: 1px solid var(--roselune-rule); }
   }
@@ -184,6 +225,10 @@
       "label": "Desktop navigation layout",
       "options": [
         {
+          "value": "left",
+          "label": "Logo left, menu next, slogan right"
+        },
+        {
           "value": "stacked",
           "label": "Below logo"
         },
@@ -192,12 +237,13 @@
           "label": "Each side of logo"
         }
       ],
-      "default": "stacked"
+      "default": "left"
     },
     {
       "type": "text",
       "id": "tagline",
-      "label": "Masthead tagline"
+      "label": "Masthead tagline",
+      "default": "Where Little Dreams Bloom"
     },
     {
       "type": "link_list",

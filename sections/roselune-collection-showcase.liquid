@@ -1,11 +1,14 @@
 {% assign s = section.settings %}
 {% render 'roselune-section-style' %}
-<div class="roselune-section roselune-flower-corners roselune-collection-panel{% if s.card_shape != 'default' %} roselune-showcase--{{ s.card_shape }}{% endif %}">
+<div{% if s.heading != blank %} id="{{ s.heading | handleize }}"{% endif %} class="roselune-section roselune-flower-corners roselune-collection-panel{% if s.card_shape != 'default' %} roselune-showcase--{{ s.card_shape }}{% endif %}">
   <div class="roselune-inner roselune-showcase roselune-showcase--{{ s.intro_layout }}">
     {% if s.intro_layout == 'center' %}
       {% render 'roselune-intro', s: s, center: true %}
+      {% assign heading_lower = s.heading | downcase %}
       {% if s.card_shape == 'arch' or s.card_shape == 'circle' %}
         {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'accessories' %}
+      {% elsif heading_lower contains 'royal' %}
+        {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'royal' %}
       {% else %}
         {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'princess_boutique' %}
       {% endif %}
@@ -416,7 +419,8 @@
         "heading": "ACCESSORIES",
         "description": "The perfect finishing touches.",
         "intro_layout": "center",
-        "display": "grid"
+        "display": "carousel",
+        "arrows": true
       }
     }
   ],

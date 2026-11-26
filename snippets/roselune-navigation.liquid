@@ -2,8 +2,15 @@
   @param {linklist} menu
   @param {number} start
   @param {number} count
+  @param {boolean} [use_product_group_fallback]
 {% enddoc %}
-{% if menu.links != blank %}
+{% if use_product_group_fallback %}
+  <nav class="roselune-nav" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
+    <ul>
+      {% render 'roselune-product-groups', mode: 'desktop', start: start, count: count %}
+    </ul>
+  </nav>
+{% elsif menu.links != blank %}
   <nav class="roselune-nav" aria-label="{{ 'accessibility.header_navigation_label' | t }}">
     <ul>{% for link in menu.links offset: start limit: count %}
       <li>

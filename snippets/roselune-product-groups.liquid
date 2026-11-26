@@ -1,0 +1,59 @@
+{% doc %}
+  Renders ROSELUNE's product-group menu items when the configured menu is empty
+  or still contains Shopify's unmodified starter links.
+
+  @param {string} [mode] - Render target: 'desktop' or 'drawer'
+  @param {number} [start] - Zero-based start offset for desktop rendering
+  @param {number} [count] - Maximum number of items for desktop rendering
+{% enddoc %}
+{% liquid
+  assign root_prefix = routes.root_url
+  unless root_prefix == '/'
+    assign root_prefix = root_prefix | append: '/' | replace: '//', '/'
+  endunless
+  assign princess_url = collections['princess-dress'].url | default: collections['princess-dresses'].url
+  if princess_url == blank
+    assign princess_url = root_prefix | append: '#princess-dress'
+  endif
+  assign royal_url = collections['royal-dress'].url | default: collections['royal-dresses'].url
+  if royal_url == blank
+    assign royal_url = root_prefix | append: '#royal-dress'
+  endif
+  assign mother_url = collections['mother-me'].url | default: collections['mother-and-me'].url
+  if mother_url == blank
+    assign mother_url = root_prefix | append: '#mother-me'
+  endif
+  assign accessories_url = collections['accessories'].url
+  if accessories_url == blank
+    assign accessories_url = root_prefix | append: '#accessories'
+  endif
+  assign group_titles = 'Princess Dress|Royal Dress|Mother & Me|Accessories' | split: '|'
+  assign group_urls = princess_url | append: '|' | append: royal_url | append: '|' | append: mother_url | append: '|' | append: accessories_url | split: '|'
+  assign group_handles = 'princess-dress|royal-dress|mother-me|accessories' | split: '|'
+  assign offset_num = start | default: 0
+  assign limit_num = count | default: 4
+%}
+{% if mode == 'drawer' %}
+  {% for title in group_titles %}
+    {% assign idx = forloop.index0 %}
+    <li
+      style="--menu-drawer-animation-index: {{ forloop.index }};"
+      class="menu-drawer__list-item--flat"
+    >
+      <a
+        id="HeaderDrawer-{{ group_handles[idx] }}"
+        href="{{ group_urls[idx] | escape }}"
+        class="menu-drawer__menu-item menu-drawer__menu-item--mainlist menu-drawer__animated-element"
+      >
+        <span class="menu-drawer__menu-item-text wrap-text">{{ title | escape }}</span>
+      </a>
+    </li>
+  {% endfor %}
+{% else %}
+  {% for title in group_titles offset: offset_num limit: limit_num %}
+    {% assign idx = offset_num | plus: forloop.index0 %}
+    <li>
+      <a href="{{ group_urls[idx] | escape }}">{{ title | escape }}</a>
+    </li>
+  {% endfor %}
+{% endif %}
