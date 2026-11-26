@@ -1,0 +1,184 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+<div class="roselune-section">
+  <div class="roselune-inner roselune-size-wrap">
+    <div class="roselune-size-head">
+      {% if s.kicker != blank %}<span class="roselune-kicker">{{ s.kicker | escape }}</span>{% endif %}
+      <h1>{{ s.heading | escape }}</h1>
+      {% if s.subtitle != blank %}<p class="roselune-size-sub">{{ s.subtitle | escape }}</p>{% endif %}
+    </div>
+
+    <div class="roselune-size-grid">
+      <div class="roselune-size-table-wrap">
+        <table class="roselune-size-table">
+          <thead>
+            <tr>
+              <th>Size / Age</th>
+              <th>Height (cm)</th>
+              <th>Chest (cm)</th>
+              <th>Waist (cm)</th>
+              <th>Dress Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for block in section.blocks %}
+              {% assign b = block.settings %}
+              <tr {{ block.shopify_attributes }}>
+                <td><strong>{{ b.size | escape }}</strong></td>
+                <td>{{ b.height | escape }}</td>
+                <td>{{ b.chest | escape }}</td>
+                <td>{{ b.waist | escape }}</td>
+                <td>{{ b.length | escape }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="roselune-measure-card">
+        <h3>{{ s.measure_heading | escape }}</h3>
+        <p><strong>1. Chest:</strong> {{ s.measure_chest | escape }}</p>
+        <p><strong>2. Waist:</strong> {{ s.measure_waist | escape }}</p>
+        <p><strong>3. Length:</strong> {{ s.measure_length | escape }}</p>
+        {% if s.button_label != blank %}
+          <a class="roselune-pill-btn" href="{{ s.button_url | default: '/pages/contact' | escape }}">{{ s.button_label | escape }} →</a>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .roselune-size-wrap { display: grid; gap: clamp(24px, 3vw, 38px); }
+  .roselune-size-head { text-align: center; display: grid; gap: 8px; justify-items: center; }
+  .roselune-size-head h1 { font-size: clamp(1.75rem, 2.8vw, 2.4rem); letter-spacing: .1em; }
+  .roselune-size-sub { font-family: var(--roselune-font); font-style: italic; font-size: 1.05rem; opacity: .85; }
+  .roselune-size-grid { display: grid; gap: clamp(24px, 3vw, 40px); align-items: start; }
+  .roselune-size-table-wrap { overflow-x: auto; border-radius: 12px; background: #fbf8f4; }
+  .roselune-size-table { width: 100%; border-collapse: collapse; font-size: .88rem; min-width: 440px; }
+  .roselune-size-table th { background: #f9eff0; color: var(--roselune-heading); padding: 13px 16px; text-align: left; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 400; }
+  .roselune-size-table td { padding: 12px 16px; border-top: 1px solid #efe4e1; }
+  .roselune-measure-card { background: #f9eff0; padding: clamp(20px, 2.5vw, 28px); border-radius: 12px; display: grid; gap: 14px; justify-items: start; }
+  .roselune-measure-card h3 { font-size: 1.15rem; letter-spacing: .06em; }
+  .roselune-measure-card p { font-size: .9rem; line-height: 1.55; }
+  @media (min-width: 900px) {
+    .roselune-size-grid { grid-template-columns: 1.45fr 1fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE Size Guide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Atelier Fit Chart"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "COUTURE SIZE GUIDE"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Measurements in centimeters (cm) · Complimentary bespoke tailoring available"
+    },
+    {
+      "type": "text",
+      "id": "measure_heading",
+      "label": "How to measure heading",
+      "default": "HOW TO MEASURE"
+    },
+    {
+      "type": "textarea",
+      "id": "measure_chest",
+      "label": "Chest instruction",
+      "default": "Measure gently around the fullest part of the chest, keeping the tape level."
+    },
+    {
+      "type": "textarea",
+      "id": "measure_waist",
+      "label": "Waist instruction",
+      "default": "Measure around the natural waistline just above the belly button."
+    },
+    {
+      "type": "textarea",
+      "id": "measure_length",
+      "label": "Length instruction",
+      "default": "Measure from the top of the shoulder down to the desired hem length."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Request Custom Sizing"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#752b36"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#5c3e43"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Desktop vertical padding",
+      "default": 56,
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding",
+      "label": "Mobile vertical padding",
+      "default": 28,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size_row",
+      "name": "Size row",
+      "settings": [
+        { "type": "text", "id": "size", "label": "Size / Age" },
+        { "type": "text", "id": "height", "label": "Height (cm)" },
+        { "type": "text", "id": "chest", "label": "Chest (cm)" },
+        { "type": "text", "id": "waist", "label": "Waist (cm)" },
+        { "type": "text", "id": "length", "label": "Dress length (cm)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE Size Guide"
+    }
+  ]
+}
+{% endschema %}

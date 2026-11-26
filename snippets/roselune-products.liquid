@@ -22,6 +22,99 @@
   <div class="roselune-products" style="--quick-add-display: flex; --quick-add-mobile-display: {% if settings.mobile_quick_add %}flex{% else %}none{% endif %}; --quick-add-mobile-opacity: 1">
     {% render 'roselune-rail', items: cards, s: s %}
   </div>
+{% elsif allow_placeholders %}
+  {% if placeholder_set == 'royal' or placeholder_set == 'mother' or placeholder_set == 'accessories' or placeholder_set == 'princess_boutique' %}
+    {% liquid
+      if placeholder_set == 'princess_boutique'
+        assign ph_images = 'roselune-princess-1.jpg,roselune-princess-2.jpg,roselune-princess-3.jpg,roselune-princess-4.jpg' | split: ','
+        assign ph_titles = 'Ivory Satin Bow Dress,Blush Rose Tulle Dress,Pastel Butterfly Tutu,Burgundy Velvet Dress' | split: ','
+        assign ph_prices = '$240.00,$265.00,$280.00,$295.00' | split: ','
+        assign ph_badges = ',,,' | split: ','
+        assign ph_swatches = '#f8f4ee|#f4d6d9,#f6c8ce|#f8f4ee,#f3eadf|#cbe2f0,#681523|#1c4d43' | split: ','
+        assign ph_pos = 'center,center,center,center' | split: ','
+      elsif placeholder_set == 'royal'
+        assign ph_images = 'roselune-princess-4.jpg,roselune-princess-1.jpg' | split: ','
+        assign ph_titles = 'Burgundy Velvet Gown,Ivory Royal Satin Gown' | split: ','
+        assign ph_prices = '$360.00,$340.00' | split: ','
+        assign ph_badges = 'COUTURE,' | split: ','
+        assign ph_swatches = '#681523|#164a3e,#f8f4ee|#e9d1c9' | split: ','
+        assign ph_pos = 'center,center' | split: ','
+      elsif placeholder_set == 'mother'
+        assign ph_images = 'roselune-garden.webp,roselune-princess-2.jpg,roselune-princess-3.jpg,roselune-royal.webp' | split: ','
+        assign ph_titles = 'Rose Garden Gown (Mother),Rose Garden Dress (Girl),Pastel Butterfly Couture Dress,Crimson Heirloom Gown' | split: ','
+        assign ph_prices = '$490.00,$265.00,$285.00,$350.00' | split: ','
+        assign ph_badges = 'MATCHING SET,MATCHING SET,,' | split: ','
+        assign ph_swatches = '#eabec4|#f8f4ee,#eabec4|#f8f4ee,#cbb3df|#eabec4,#681523|#f8f4ee' | split: ','
+        assign ph_pos = '62% 25%,center,center,38% 20%' | split: ','
+      else
+        assign ph_images = 'roselune-princess-1.jpg,roselune-princess-2.jpg,roselune-princess-3.jpg,roselune-garden.webp,roselune-mother.webp,roselune-royal.webp' | split: ','
+        assign ph_titles = 'Ivory Silk Bow,Blush Organza Bow,Butterfly Tiara,Rose Garden Headpiece,Couture Floral Clip,Crimson Velvet Bow' | split: ','
+        assign ph_prices = '$48.00,$48.00,$72.00,$65.00,$42.00,$45.00' | split: ','
+        assign ph_badges = ',,,,,' | split: ','
+        assign ph_swatches = ',,,,,' | split: ','
+        assign ph_pos = 'center 8%,center 8%,center 12%,64% 12%,64% 18%,35% 18%' | split: ','
+      endif
+    %}
+    {% capture cards %}
+      {% for img_name in ph_images limit: s.limit %}
+        {% assign idx = forloop.index0 %}
+        {% assign sw_list = ph_swatches[idx] | split: '|' %}
+        <li>
+          <div class="roselune-product roselune-boutique-card">
+            <div class="roselune-product-media">
+              <a href="{{ s.button_url | default: routes.all_products_collection_url | escape }}" aria-label="{{ ph_titles[idx] | escape }}">
+                <img src="{{ img_name | asset_url }}" alt="{{ ph_titles[idx] | escape }}" loading="lazy" width="600" height="800" style="object-position: {{ ph_pos[idx] }};">
+              </a>
+              {% if ph_badges[idx] != blank %}
+                <span class="roselune-boutique-badge">{{ ph_badges[idx] }}</span>
+              {% endif %}
+            </div>
+            <div class="roselune-boutique-info">
+              <a class="roselune-boutique-title" href="{{ s.button_url | default: routes.all_products_collection_url | escape }}">{{ ph_titles[idx] | escape }}</a>
+              <span class="roselune-boutique-price">{{ ph_prices[idx] }}</span>
+              {% if sw_list.size > 0 and ph_swatches[idx] != blank %}
+                <div class="roselune-boutique-swatches" aria-hidden="true">
+                  {% for hex in sw_list %}
+                    <span class="roselune-boutique-swatch" style="background: {{ hex }}"></span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    {% endcapture %}
+    <div class="roselune-products">
+      {% render 'roselune-rail', items: cards, s: s %}
+    </div>
+  {% else %}
+    {% liquid
+      assign placeholder_images = 'roselune-princess-1.jpg,roselune-princess-2.jpg,roselune-princess-3.jpg,roselune-princess-4.jpg' | split: ','
+      assign placeholder_titles = 'Ivory Satin Bow Princess Dress,Blush Rose Tulle Princess Dress,Pastel Butterfly Tulle Princess Dress,Burgundy Velvet Feathery Princess Dress' | split: ','
+    %}
+    {% capture cards %}
+      {% for img_name in placeholder_images limit: s.limit %}
+        {% assign idx = forloop.index0 %}
+        <li>
+          <div class="roselune-product">
+            <div class="roselune-product-media">
+              <a href="{{ s.button_url | default: routes.all_products_collection_url | escape }}" aria-label="{{ placeholder_titles[idx] | escape }}">
+                <img src="{{ img_name | asset_url }}" alt="{{ placeholder_titles[idx] | escape }}" loading="lazy" width="600" height="600">
+              </a>
+            </div>
+            {% if s.show_options %}
+              <div class="roselune-product-copy">
+                <a class="roselune-options" href="{{ s.button_url | default: routes.all_products_collection_url | escape }}">{{ s.options_label | default: 'Choose options' | escape }}</a>
+              </div>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    {% endcapture %}
+    <div class="roselune-products">
+      {% render 'roselune-rail', items: cards, s: s %}
+    </div>
+  {% endif %}
 {% elsif request.design_mode %}
   <p class="roselune-editor-note">Choose a collection or select products to fill this showcase.</p>
 {% endif %}

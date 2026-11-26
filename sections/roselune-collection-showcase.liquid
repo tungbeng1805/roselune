@@ -1,22 +1,48 @@
 {% assign s = section.settings %}
 {% render 'roselune-section-style' %}
-<div class="roselune-section roselune-flower-corners roselune-collection-panel">
+<div class="roselune-section roselune-flower-corners roselune-collection-panel{% if s.card_shape != 'default' %} roselune-showcase--{{ s.card_shape }}{% endif %}">
   <div class="roselune-inner roselune-showcase roselune-showcase--{{ s.intro_layout }}">
     {% if s.intro_layout == 'center' %}
       {% render 'roselune-intro', s: s, center: true %}
+      {% if s.card_shape == 'arch' or s.card_shape == 'circle' %}
+        {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'accessories' %}
+      {% else %}
+        {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'princess_boutique' %}
+      {% endif %}
     {% else %}
       {% render 'roselune-intro', s: s %}
+      {% render 'roselune-products', s: s, allow_placeholders: true %}
     {% endif %}
-    {% render 'roselune-products', s: s %}
   </div>
 </div>
 {% stylesheet %}
   .roselune-showcase { display: grid; gap: clamp(16px, 2vw, 36px); align-items: center; }
   .roselune-collection-panel::after { display: none; }
-  .roselune-collection-panel { border-block: 2px solid white; }
+  .roselune-collection-panel { border-block: 1px solid color-mix(in srgb, var(--roselune-heading) 8%, transparent); }
   .roselune-showcase--side .roselune-intro { justify-items: center; text-align: center; }
   .roselune-showcase--side .roselune-intro h2 { max-width: 11ch; }
+  .roselune-showcase .roselune-button {
+    border-radius: 999px;
+    border-color: color-mix(in srgb, var(--roselune-heading) 32%, transparent);
+    padding: 7px 22px;
+  }
   .roselune-products { min-width: 0; }
+  .roselune-showcase--arch .roselune-product-media {
+    border-radius: 999px 999px 6px 6px; padding: 8px;
+    background: #faf2ef; border: 1px solid color-mix(in srgb, var(--roselune-heading) 12%, transparent);
+  }
+  .roselune-showcase--arch .roselune-product-media > a { inset: 8px; border-radius: 999px 999px 4px 4px; }
+  .roselune-showcase--circle .roselune-product-media {
+    border-radius: 50%; padding: 6px; aspect-ratio: 1 / 1;
+    background: #ffffff; border: 1px solid color-mix(in srgb, var(--roselune-heading) 10%, transparent);
+  }
+  .roselune-showcase--circle .roselune-product-media > a { inset: 6px; border-radius: 50%; }
+  .roselune-boutique-info { text-align: center; padding-top: 10px; display: grid; gap: 4px; justify-items: center; }
+  .roselune-boutique-title { font-family: var(--roselune-font); font-size: .88rem; color: var(--roselune-heading); text-decoration: none; letter-spacing: .02em; }
+  .roselune-boutique-title:hover { text-decoration: underline; text-underline-offset: .2em; }
+  .roselune-boutique-price { font-size: .82rem; color: var(--roselune-ink); opacity: .88; letter-spacing: .04em; }
+  .roselune-boutique-swatches { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
+  .roselune-boutique-swatch { width: 10px; height: 10px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--roselune-heading) 25%, transparent); }
   @media (min-width: 990px) {
     .roselune-showcase--side:has(.roselune-products, .roselune-editor-note) { grid-template-columns: minmax(180px, 1fr) minmax(0, 3.8fr); }
   }
@@ -141,6 +167,26 @@
       "max": 48,
       "step": 2,
       "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "card_shape",
+      "label": "Card frame shape",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "arch",
+          "label": "Arch"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        }
+      ]
     },
     {
       "type": "select",

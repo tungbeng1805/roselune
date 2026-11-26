@@ -304,15 +304,18 @@
       "name": "Princess Dress",
       "settings": {
         "description": "Dreamy dresses for every little princess",
-        "use_roses": true,
-        "background": "#faedeb",
+        "intro_layout": "center",
+        "use_roses": false,
+        "background": "#f9eff0",
         "heading_color": "#752b36",
-        "text_color": "#59333a",
-        "gap": 10,
-        "padding": 28,
-        "mobile_padding": 22,
+        "text_color": "#5c3e43",
+        "ratio": "3 / 4",
+        "radius": 12,
+        "gap": 20,
+        "padding": 60,
+        "mobile_padding": 32,
         "info_align": "center",
-        "show_options": true
+        "show_options": false
       }
     },
     "roselune-royal": {
@@ -320,18 +323,23 @@
       "name": "Royal Dress",
       "settings": {
         "campaign_art": "royal",
-        "description": "Elegant styles for special occasions",
-        "composition": "beside",
+        "description": "Timeless elegance for life's most special occasions",
+        "composition": "editorial_split_flipped",
+        "alignment": "start",
         "opacity": 0,
-        "height": 300,
-        "mobile_height": 300,
-        "background": "#fcf3ee",
+        "height": 440,
+        "mobile_height": 320,
+        "background": "#fbf8f4",
         "heading_color": "#752b36",
-        "padding": 0,
-        "mobile_padding": 0,
+        "text_color": "#5c3e43",
+        "padding": 60,
+        "mobile_padding": 32,
         "columns": 2,
         "tablet_columns": 2,
-        "limit": 2
+        "limit": 2,
+        "ratio": "3 / 4",
+        "radius": 12,
+        "gap": 20
       }
     },
     "roselune-mother": {
@@ -339,15 +347,23 @@
       "name": "Mother & Me",
       "settings": {
         "heading": "MOTHER & ME",
-        "description": "Matching looks for unforgettable moments",
-        "composition": "image_right",
-        "show_products": false,
-        "background": "#faebe9",
+        "description": "Matching couture looks crafted for unforgettable moments together",
+        "button_label": "Explore",
+        "composition": "story_banner",
+        "show_products": true,
+        "columns": 4,
+        "tablet_columns": 2,
+        "limit": 4,
+        "ratio": "3 / 4",
+        "radius": 12,
+        "gap": 20,
+        "background": "#ffffff",
         "campaign_art": "mother",
         "opacity": 0,
-        "height": 300,
-        "mobile_height": 300,
+        "height": 340,
+        "mobile_height": 280,
         "heading_color": "#752b36",
+        "text_color": "#5c3e43",
         "padding": 0,
         "mobile_padding": 0
       }
@@ -360,78 +376,127 @@
         "description": "The perfect finishing touches",
         "display": "grid",
         "intro_layout": "center",
-        "use_roses": true,
-        "background": "#fcf5f0",
+        "card_shape": "circle",
+        "use_roses": false,
+        "background": "#f9eff0",
         "heading_color": "#752b36",
+        "text_color": "#5c3e43",
         "columns": 6,
-        "ratio": "3 / 2",
-        "gap": 10,
-        "padding": 20,
-        "mobile_padding": 22
+        "ratio": "1 / 1",
+        "gap": 20,
+        "padding": 56,
+        "mobile_padding": 28
       }
     },
     "roselune-community": {
       "type": "roselune-community",
       "settings": {
-        "intro_layout": "side",
-        "description": "From the ROSELUNE lookbook",
-        "display": "grid",
+        "intro_layout": "center",
+        "description": "Little Princesses in ROSELUNE",
+        "display": "staggered",
         "columns": 5,
-        "ratio": "1 / 1",
-        "gap": 10,
-        "padding": 20,
-        "mobile_padding": 24,
-        "background": "#f8e8e7",
+        "tablet_columns": 3,
+        "ratio": "3 / 4",
+        "gap": 14,
+        "padding": 56,
+        "mobile_padding": 28,
+        "background": "#ffffff",
         "heading_color": "#752b36"
       },
       "blocks": {
         "roselune-look-1": {
           "type": "roselune-post",
           "settings": {
-            "lookbook_image": "1",
-            "alt": "Ivory dress with a bow in the rose garden"
+            "lookbook_image": "princess-1",
+            "alt": "Ivory satin princess dress"
           }
         },
         "roselune-look-2": {
           "type": "roselune-post",
           "settings": {
-            "lookbook_image": "2",
-            "alt": "Lavender tulle dress among garden roses"
+            "lookbook_image": "royal",
+            "alt": "Burgundy velvet gown with ivory bow"
           }
         },
         "roselune-look-3": {
           "type": "roselune-post",
           "settings": {
-            "lookbook_image": "3",
-            "alt": "Burgundy gown with an ivory sash"
+            "lookbook_image": "princess-3",
+            "alt": "Pastel butterfly tulle dress"
           }
         },
         "roselune-look-4": {
           "type": "roselune-post",
           "settings": {
-            "lookbook_image": "4",
-            "alt": "Pink ruffled gown on a garden path"
+            "lookbook_image": "garden",
+            "alt": "Pink ruffled gown in the rose garden"
           }
         },
         "roselune-look-5": {
           "type": "roselune-post",
           "settings": {
-            "lookbook_image": "5",
-            "alt": "Emerald dress framed by roses"
+            "lookbook_image": "mother",
+            "alt": "Mother and daughter in matching blush couture"
           }
         }
       },
       "block_order": [
+        "roselune-look-4",
         "roselune-look-1",
         "roselune-look-2",
         "roselune-look-3",
-        "roselune-look-4",
         "roselune-look-5"
       ]
     },
     "roselune-feedback": {
       "type": "roselune-testimonials",
-      "settings": {}
+      "settings": {
+        "heading": "CUSTOMER FEEDBACK",
+        "display": "grid",
+        "columns": 3,
+        "tablet_columns": 3,
+        "gap": 24,
+        "background": "#fbf8f4",
+        "card_background": "#ffffff",
+        "star_color": "#c4924c",
+        "heading_color": "#752b36",
+        "padding": 52,
+        "mobile_padding": 28
+      },
+      "blocks": {
+        "review-1": {
+          "type": "roselune-review",
+          "settings": {
+            "show_rating": true,
+            "rating": 5,
+            "review": "“The tulle layers and delicate rose details took our breath away. My daughter felt like a true storybook princess.”",
+            "customer": "— Elena M., Paris"
+          }
+        },
+        "review-2": {
+          "type": "roselune-review",
+          "settings": {
+            "show_rating": true,
+            "rating": 5,
+            "review": "“Impeccable craftsmanship and soft lining. She wore it all evening at our family celebration without a single complaint.”",
+            "customer": "— Sophia L., London"
+          }
+        },
+        "review-3": {
+          "type": "roselune-review",
+          "settings": {
+            "show_rating": true,
+            "rating": 5,
+            "review": "“Our Mother & Me matching gowns were the highlight of the photoshoot. Truly heirloom-quality couture.”",
+            "customer": "— Claire V., New York"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3"
+      ]
     },
     "roselune-newsletter": {
       "type": "roselune-newsletter",

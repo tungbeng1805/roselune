@@ -1,0 +1,79 @@
+{% assign s = section.settings %}
+{% render 'roselune-section-style' %}
+<div class="roselune-section">
+  <div class="roselune-inner roselune-contact-grid">
+    <div class="roselune-contact-info">
+      {% if s.kicker != blank %}<span class="roselune-kicker">{{ s.kicker | escape }}</span>{% endif %}
+      <h1>{{ s.heading | escape }}</h1>
+      {% if s.description != blank %}<p class="roselune-contact-lead">{{ s.description | escape }}</p>{% endif %}
+      <div class="roselune-contact-card">
+        {% if s.email != blank %}<div><strong>Email:</strong> {{ s.email | escape }}</div>{% endif %}
+        {% if s.hours != blank %}<div><strong>Atelier Hours:</strong> {{ s.hours | escape }}</div>{% endif %}
+        {% if s.phone != blank %}<div><strong>WhatsApp / Hotline:</strong> {{ s.phone | escape }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="roselune-contact-form-card">
+      {% form 'contact', class: 'roselune-contact-form' %}
+        {% if form.posted_successfully? %}
+          <p class="roselune-contact-success">Thank you for reaching out. Our atelier stylists will reply shortly.</p>
+        {% endif %}
+        {% if form.errors %}
+          <div class="roselune-contact-errors">{{ form.errors | default_errors }}</div>
+        {% endif %}
+        <div class="roselune-contact-row">
+          <input class="roselune-input" type="text" name="contact[name]" placeholder="Your Name" required aria-label="Your Name">
+          <input class="roselune-input" type="email" name="contact[email]" placeholder="Email Address" required aria-label="Email Address">
+        </div>
+        <input class="roselune-input" type="text" name="contact[subject]" placeholder="Subject (e.g., Custom Sizing, Order Inquiry, Mother & Me)" aria-label="Subject">
+        <textarea class="roselune-input roselune-textarea" name="contact[body]" placeholder="Tell us about your occasion, preferred dress, or measurements..." rows="4" required aria-label="Message"></textarea>
+        <button class="roselune-pill-btn roselune-pill-btn--solid" type="submit">Send Message →</button>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .roselune-contact-grid { display: grid; gap: clamp(24px, 4vw, 52px); align-items: start; }
+  .roselune-contact-info { display: grid; gap: 14px; }
+  .roselune-contact-info h1 { font-size: clamp(1.75rem, 2.8vw, 2.4rem); letter-spacing: .08em; }
+  .roselune-contact-lead { font-family: var(--roselune-font); font-style: italic; font-size: 1.05rem; line-height: 1.6; }
+  .roselune-contact-card { background: #ffffff; padding: 20px; border-radius: 12px; display: grid; gap: 8px; font-size: .9rem; }
+  .roselune-contact-form-card { background: #ffffff; padding: clamp(22px, 3vw, 34px); border-radius: 14px; box-shadow: 0 4px 20px rgba(117, 43, 54, 0.04); }
+  .roselune-contact-form { display: grid; gap: 14px; }
+  .roselune-contact-row { display: grid; gap: 14px; }
+  .roselune-input { width: 100%; padding: 12px 16px; border: 1px solid #e7dad7; border-radius: 8px; background: #fbf8f4; color: inherit; font: inherit; font-size: .9rem; }
+  .roselune-textarea { resize: vertical; min-height: 110px; }
+  .roselune-contact-form button { justify-self: start; }
+  .roselune-contact-success { background: #f9eff0; color: #752b36; padding: 12px 16px; border-radius: 8px; font-size: .9rem; }
+  @media (min-width: 750px) {
+    .roselune-contact-row { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 900px) {
+    .roselune-contact-grid { grid-template-columns: 1fr 1.25fr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "ROSELUNE Contact Us",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Personal Styling" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "GET IN TOUCH" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Whether you need sizing advice, bespoke Mother & Me matching, or express delivery for a special date, our stylists are here to help." },
+    { "type": "text", "id": "email", "label": "Email", "default": "concierge@roselune.com" },
+    { "type": "text", "id": "hours", "label": "Atelier hours", "default": "Mon – Sat, 9:00 AM – 6:00 PM" },
+    { "type": "text", "id": "phone", "label": "Phone / WhatsApp", "default": "+84 392 117 567" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#fbf8f4" },
+    { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#752b36" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#5c3e43" },
+    { "type": "range", "id": "padding", "label": "Desktop vertical padding", "default": 56, "min": 0, "max": 120, "step": 4, "unit": "px" },
+    { "type": "range", "id": "mobile_padding", "label": "Mobile vertical padding", "default": 28, "min": 0, "max": 100, "step": 2, "unit": "px" }
+  ],
+  "presets": [
+    {
+      "name": "ROSELUNE Contact Us"
+    }
+  ]
+}
+{% endschema %}

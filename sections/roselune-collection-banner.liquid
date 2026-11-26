@@ -11,18 +11,44 @@
   }
 {% endstyle %}
 <div class="roselune-section roselune-editorial roselune-editorial--{{ s.composition }}">
-  <div class="roselune-editorial-banner">
-    <div class="roselune-editorial-art{% if s.natural_mobile %} roselune-editorial-art--natural{% endif %}">
-      {% if s.composition == 'image_right' %}
-        {% render 'roselune-campaign-media', s: s, placeholder: 'hero-apparel-3' %}
-      {% else %}
+  {% if s.composition == 'editorial_split' or s.composition == 'editorial_split_flipped' %}
+    <div class="roselune-inner roselune-editorial-split{% if s.composition == 'editorial_split_flipped' %} roselune-editorial-split--flipped{% endif %}">
+      <div class="roselune-editorial-art roselune-editorial-art--rounded{% if s.natural_mobile %} roselune-editorial-art--natural{% endif %}">
         {% render 'roselune-campaign-media', s: s, placeholder: 'hero-apparel-2' %}
-      {% endif %}
+      </div>
+      <div class="roselune-editorial-right">
+        <div class="roselune-editorial-copy">{% render 'roselune-intro', s: s, hide_divider: true %}</div>
+        {% if s.show_products %}
+          <div class="roselune-editorial-products">{% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'royal' %}</div>
+        {% endif %}
+      </div>
     </div>
-    <div class="roselune-editorial-copy">{% render 'roselune-intro', s: s %}</div>
-  </div>
-  {% if s.show_products %}
-    <div class="roselune-editorial-products">{% render 'roselune-products', s: s %}</div>
+  {% else %}
+    <div class="roselune-editorial-banner">
+      <div class="roselune-editorial-art{% if s.natural_mobile %} roselune-editorial-art--natural{% endif %}">
+        {% if s.composition == 'image_right' %}
+          {% render 'roselune-campaign-media', s: s, placeholder: 'hero-apparel-3' %}
+        {% else %}
+          {% render 'roselune-campaign-media', s: s, placeholder: 'hero-apparel-2' %}
+        {% endif %}
+      </div>
+      <div class="roselune-editorial-copy">
+        {% if s.composition == 'story_banner' %}
+          {% render 'roselune-intro', s: s, hide_divider: true %}
+        {% else %}
+          {% render 'roselune-intro', s: s %}
+        {% endif %}
+      </div>
+    </div>
+    {% if s.show_products %}
+      <div class="roselune-editorial-products">
+        {% if s.composition == 'story_banner' %}
+          {% render 'roselune-products', s: s, allow_placeholders: true, placeholder_set: 'mother' %}
+        {% else %}
+          {% render 'roselune-products', s: s %}
+        {% endif %}
+      </div>
+    {% endif %}
   {% endif %}
 </div>
 {% stylesheet %}
@@ -31,20 +57,62 @@
   .roselune-editorial-art { position: relative; min-height: var(--roselune-mobile-height); background: color-mix(in srgb, var(--roselune-ink) 10%, var(--roselune-bg)); }
   .roselune-editorial-art::after { content: ''; position: absolute; inset: 0; background: var(--roselune-overlay-fill); opacity: var(--roselune-opacity); pointer-events: none; }
   .roselune-editorial-art--natural { min-height: 0; aspect-ratio: var(--roselune-art-ratio); }
+  .roselune-editorial-art--framed { border: 1px solid color-mix(in srgb, var(--roselune-heading) 26%, transparent); padding: 8px; background: transparent; }
+  .roselune-editorial-art--framed :is(.roselune-picture, img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .roselune-editorial-art--rounded { border-radius: 14px; overflow: hidden; }
+  .roselune-editorial-art--rounded :is(.roselune-picture, img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .roselune-editorial-copy { display: grid; align-items: center; padding: clamp(32px, 5vw, 94px); }
   .roselune-editorial-copy .roselune-intro { text-align: var(--roselune-align); justify-items: var(--roselune-align); }
   .roselune-editorial--banner :is(.roselune-editorial-art, .roselune-editorial-copy) { grid-area: 1 / 1; }
   .roselune-editorial--banner .roselune-editorial-copy { z-index: 1; pointer-events: none; padding-block: 74px; color: var(--roselune-banner-ink); --roselune-heading: var(--roselune-banner-ink); }
+  .roselune-editorial--story_banner :is(.roselune-editorial-art, .roselune-editorial-copy) { grid-area: 1 / 1; }
+  .roselune-editorial--story_banner .roselune-editorial-art { height: var(--roselune-mobile-height); min-height: 0; overflow: hidden; }
+  .roselune-editorial--story_banner .roselune-editorial-art :is(.roselune-picture, img) { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
+  .roselune-editorial--story_banner .roselune-editorial-art::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.68) 28%, rgba(255, 255, 255, 0) 54%);
+    opacity: 1;
+  }
+  .roselune-editorial--story_banner .roselune-editorial-copy { z-index: 1; pointer-events: none; max-width: 520px; padding-inline: clamp(24px, 5vw, 76px); }
+  .roselune-editorial--story_banner .roselune-editorial-copy .roselune-intro { text-align: start; justify-items: start; gap: 10px; }
+  .roselune-editorial--story_banner .roselune-editorial-products { padding-bottom: 48px; }
   .roselune-editorial-copy a { pointer-events: auto; }
   .roselune-editorial-products { min-width: 0; max-width: var(--roselune-width); margin-inline: auto; padding: 28px clamp(16px, 4vw, 76px) 0; }
   .roselune-editorial-products:not(:has(*)) { display: none; }
+
+  .roselune-editorial-split { display: grid; gap: clamp(24px, 3.5vw, 52px); align-items: center; }
+  .roselune-editorial-right { display: grid; gap: 24px; min-width: 0; }
+  :is(.roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped) .roselune-editorial-copy { padding: 0; }
+  :is(.roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped) .roselune-editorial-copy .roselune-intro { text-align: start; justify-items: start; gap: 10px; }
+  :is(.roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped) .roselune-editorial-products { width: 100%; max-width: none; padding: 0; }
+  .roselune-editorial .roselune-button {
+    border-radius: 999px;
+    border-color: color-mix(in srgb, var(--roselune-heading) 32%, transparent);
+    padding: 7px 22px;
+  }
+
+  .roselune-boutique-badge {
+    position: absolute; top: 10px; inset-inline-start: 10px; z-index: 1; pointer-events: none;
+    background: rgba(255, 255, 255, 0.92); color: #752b36;
+    font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; padding: 4px 8px;
+  }
+  .roselune-boutique-info { text-align: center; padding-top: 10px; display: grid; gap: 4px; justify-items: center; }
+  .roselune-boutique-title { font-family: var(--roselune-font); font-size: .88rem; color: var(--roselune-heading); text-decoration: none; letter-spacing: .02em; }
+  .roselune-boutique-title:hover { text-decoration: underline; text-underline-offset: .2em; }
+  .roselune-boutique-price { font-size: .82rem; color: var(--roselune-ink); opacity: .9; letter-spacing: .04em; }
+  .roselune-boutique-swatches { display: flex; justify-content: center; gap: 6px; margin-top: 3px; }
+  .roselune-boutique-swatch { width: 11px; height: 11px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--roselune-heading) 45%, transparent); }
+
   @media (min-width: 750px) {
     .roselune-editorial { padding-block: var(--roselune-pad); }
     .roselune-editorial-art { min-height: var(--roselune-height); aspect-ratio: auto; }
-    .roselune-editorial:not(.roselune-editorial--banner) .roselune-editorial-banner { grid-template-columns: 1.2fr 1fr; }
+    .roselune-editorial--story_banner .roselune-editorial-art { height: var(--roselune-height); }
+    .roselune-editorial:not(.roselune-editorial--banner, .roselune-editorial--editorial_split, .roselune-editorial--editorial_split_flipped, .roselune-editorial--story_banner) .roselune-editorial-banner { grid-template-columns: 1.2fr 1fr; }
     .roselune-editorial--image_right .roselune-editorial-art { order: 1; }
   }
   @media (min-width: 990px) {
+    .roselune-editorial-split { grid-template-columns: 1.05fr 1fr; }
+    .roselune-editorial-split--flipped { grid-template-columns: 1.15fr 1fr; }
+    .roselune-editorial-split--flipped .roselune-editorial-art { order: 1; }
     .roselune-editorial--beside:has(.roselune-products) { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); align-items: center; }
     .roselune-editorial--beside:has(.roselune-products) .roselune-editorial-banner { grid-template-columns: 1.65fr 1fr; }
     .roselune-editorial--beside .roselune-editorial-products { width: 100%; padding: 12px clamp(16px, 3vw, 48px) 12px 0; }
@@ -60,6 +128,11 @@
     {
       "type": "header",
       "content": "Editorial"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker"
     },
     {
       "type": "text",
@@ -149,6 +222,18 @@
         {
           "value": "beside",
           "label": "Beside"
+        },
+        {
+          "value": "editorial_split",
+          "label": "Editorial split"
+        },
+        {
+          "value": "editorial_split_flipped",
+          "label": "Editorial split (flipped)"
+        },
+        {
+          "value": "story_banner",
+          "label": "Story banner + products"
         }
       ]
     },
@@ -279,6 +364,26 @@
     },
     {
       "type": "select",
+      "id": "ratio",
+      "label": "Product image aspect ratio",
+      "default": "3 / 4",
+      "options": [
+        {
+          "value": "3 / 4",
+          "label": "3 / 4"
+        },
+        {
+          "value": "4 / 5",
+          "label": "4 / 5"
+        },
+        {
+          "value": "1 / 1",
+          "label": "1 / 1"
+        }
+      ]
+    },
+    {
+      "type": "select",
       "id": "display",
       "label": "Display mode",
       "default": "carousel",
@@ -344,6 +449,16 @@
       "id": "gap",
       "label": "Item gap",
       "default": 18,
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Image corner radius",
+      "default": 12,
       "min": 0,
       "max": 48,
       "step": 2,

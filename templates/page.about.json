@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "roselune-about",
+      "blocks": {
+        "pillar-1": {
+          "type": "pillar",
+          "settings": {
+            "title": "Hand-Layered Tulle",
+            "description": "Every skirt is gathered by hand from feather-light tulle for effortless volume and graceful movement."
+          }
+        },
+        "pillar-2": {
+          "type": "pillar",
+          "settings": {
+            "title": "Gentle Cotton Lining",
+            "description": "Breathable, cloud-soft 100% cotton touches delicate skin so little princesses stay comfortable all day."
+          }
+        },
+        "pillar-3": {
+          "type": "pillar",
+          "settings": {
+            "title": "Heirloom Craftsmanship",
+            "description": "Made in small atelier batches with couture finishing designed to be treasured for generations."
+          }
+        }
+      },
+      "block_order": [
+        "pillar-1",
+        "pillar-2",
+        "pillar-3"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

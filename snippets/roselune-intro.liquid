@@ -2,11 +2,25 @@
   @param {object} s - Section settings
   @param {boolean} [center]
 {% enddoc %}
-{% assign url = s.button_url | default: s.collection.url %}
+{% assign url = s.button_url | default: s.collection.url | default: routes.all_products_collection_url %}
 <div class="roselune-intro{% if center %} roselune-intro--center{% endif %}">
+  {% if s.kicker != blank %}<span class="roselune-kicker">{{ s.kicker | escape }}</span>{% endif %}
   {% if s.heading != blank %}<h2>{{ s.heading | escape }}</h2>{% endif %}
+  {% unless center or hide_divider %}
+    <div class="roselune-intro-divider" aria-hidden="true">
+      <svg viewBox="0 0 120 18" width="120" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="8" y1="9" x2="46" y2="9" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+        <line x1="74" y1="9" x2="112" y2="9" stroke="currentColor" stroke-width="0.75" opacity="0.55"/>
+        <circle cx="60" cy="9" r="3.2" stroke="currentColor" stroke-width="0.9" fill="currentColor" fill-opacity="0.18"/>
+        <path d="M53 9c2-2.5 4-2.5 5.5 0M61.5 9c1.5-2.5 3.5-2.5 5.5 0M53 9c2 2.5 4 2.5 5.5 0M61.5 9c1.5 2.5 3.5 2.5 5.5 0" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+  {% endunless %}
   {% if s.description != blank %}<p>{{ s.description | escape }}</p>{% endif %}
   {% if s.button_label != blank and url != blank %}
     <a class="roselune-button" href="{{ url | escape }}">{{ s.button_label | escape }}</a>
   {% endif %}
 </div>
+{% stylesheet %}
+  .roselune-intro-divider { display: flex; justify-content: center; color: var(--roselune-heading); opacity: .85; margin-block: -4px; }
+{% endstylesheet %}

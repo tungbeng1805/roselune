@@ -71,8 +71,15 @@
   .roselune-badge { pointer-events: none; position: absolute; top: 8px; inset-inline-start: 8px; background: var(--roselune-bg); color: var(--roselune-ink); padding: 4px 9px; font-size: .72rem; }
   .roselune-product-copy { text-align: var(--roselune-info-align); padding-block: 12px 4px; display: grid; gap: 6px; }
   .roselune-product-copy h3 a { color: inherit; text-decoration: none; }
-  .roselune-product-copy h3 a:hover, .roselune-options { text-decoration: underline; text-underline-offset: .2em; }
-  .roselune-options { color: inherit; font-size: .82rem; }
+  .roselune-product-copy h3 a:hover { text-decoration: underline; text-underline-offset: .2em; }
+  .roselune-options {
+    display: inline-flex; align-items: center; justify-content: center; justify-self: center;
+    padding: 6px 16px; border: 1px solid color-mix(in srgb, var(--roselune-heading) 45%, transparent);
+    border-radius: 3px; background: rgba(255, 255, 255, 0.65); color: var(--roselune-heading);
+    font-family: var(--roselune-font); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase;
+    text-decoration: none; transition: background-color .2s ease, border-color .2s ease;
+  }
+  .roselune-options:hover { background: rgba(255, 255, 255, 0.95); border-color: var(--roselune-heading); }
   .roselune-swatches { display: flex; flex-wrap: wrap; justify-content: var(--roselune-info-align); gap: 2px; }
   .roselune-swatches a { width: 28px; height: 28px; display: grid; place-items: center; }
   .roselune-swatches .swatch { width: 18px; height: 18px; }

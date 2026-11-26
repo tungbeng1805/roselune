@@ -30,7 +30,7 @@
     <div class="roselune-mast roselune-mast--{{ s.nav_layout }}">
       <div class="roselune-header-tools">
         <div class="roselune-mobile-menu">
-          {% render 'header-drawer', linklist: s.menu, section: section, data_header_drawer_type: 'mobile-drawer' %}
+          {% render 'header-drawer', linklist: s.menu, section: section, data_header_drawer_type: 'mobile-drawer', roselune_style: true %}
         </div>
         {% if s.show_search %}<div class="roselune-search-start">{% render 'search', display_style: 'icon' %}</div>{% endif %}
         {% if s.nav_layout == 'split' %}{% render 'roselune-navigation', menu: s.menu, start: 0, count: menu_half %}{% endif %}

@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main": {
+      "type": "roselune-size-guide",
+      "blocks": {
+        "row-2y": { "type": "size_row", "settings": { "size": "2Y (18–24M)", "height": "86 – 92", "chest": "52", "waist": "50", "length": "54" } },
+        "row-3y": { "type": "size_row", "settings": { "size": "3Y (2–3 Yrs)", "height": "92 – 98", "chest": "54", "waist": "51", "length": "58" } },
+        "row-4y": { "type": "size_row", "settings": { "size": "4Y (3–4 Yrs)", "height": "98 – 104", "chest": "56", "waist": "52", "length": "62" } },
+        "row-5y": { "type": "size_row", "settings": { "size": "5Y (4–5 Yrs)", "height": "104 – 110", "chest": "58", "waist": "53", "length": "66" } },
+        "row-6y": { "type": "size_row", "settings": { "size": "6Y (5–6 Yrs)", "height": "110 – 116", "chest": "60", "waist": "54", "length": "70" } },
+        "row-8y": { "type": "size_row", "settings": { "size": "8Y (7–8 Yrs)", "height": "122 – 128", "chest": "64", "waist": "57", "length": "78" } },
+        "row-10y": { "type": "size_row", "settings": { "size": "10Y (9–10 Yrs)", "height": "134 – 140", "chest": "70", "waist": "60", "length": "86" } }
+      },
+      "block_order": [
+        "row-2y",
+        "row-3y",
+        "row-4y",
+        "row-5y",
+        "row-6y",
+        "row-8y",
+        "row-10y"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

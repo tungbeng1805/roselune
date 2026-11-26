@@ -76,21 +76,39 @@
       ref="menuDrawer"
       class="
         menu-drawer
+        {% if roselune_style %} roselune-menu-drawer{% endif %}
         {% if block_settings.background_color != blank or block_settings.text_color != blank %}
           color-custom-{{ block.id }}
         {% endif %}
       "
     >
-      <button
-        class="button close-button menu-drawer__close-button focus-inset"
-        type="button"
-        aria-label="{{ 'actions.close' | t }}"
-        on:click="/close"
-      >
-        <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-          {{- 'icon-close-menu.svg' | inline_asset_content -}}
-        </span>
-      </button>
+      {% if roselune_style %}
+        <div class="roselune-drawer-top">
+          <a class="roselune-drawer-brand" href="{{ routes.root_url }}">
+            <img src="{{ 'roselune-emblem.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="28" height="28">
+            <span>ROSELUNE</span>
+          </a>
+          <button
+            class="roselune-drawer-close"
+            type="button"
+            aria-label="{{ 'actions.close' | t }}"
+            on:click="/close"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg>
+          </button>
+        </div>
+      {% else %}
+        <button
+          class="button close-button menu-drawer__close-button focus-inset"
+          type="button"
+          aria-label="{{ 'actions.close' | t }}"
+          on:click="/close"
+        >
+          <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
+            {{- 'icon-close-menu.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      {% endif %}
       <nav
         class="menu-drawer__navigation"
         style="
@@ -588,7 +606,27 @@
             {%- endfor -%}
           {% endif %}
         </ul>
+        {% if roselune_style %}
+          <a class="roselune-drawer-feature" href="{{ routes.all_products_collection_url }}">
+            <img src="{{ 'roselune-garden.webp' | asset_url }}" alt="Little Dreams Bloom" width="640" height="320" loading="lazy">
+            <div class="roselune-drawer-feature-copy">
+              <span class="roselune-drawer-feature-kicker">New Season</span>
+              <span class="roselune-drawer-feature-title">Little Dreams Bloom</span>
+              <span class="roselune-drawer-feature-pill">Explore →</span>
+            </div>
+          </a>
+        {% endif %}
       </nav>
+      {% if roselune_style %}
+        <div class="roselune-drawer-footer">
+          <div class="roselune-drawer-utils">
+            <a href="{{ routes.account_url }}">Account</a>
+            <a href="{{ routes.search_url }}">Search</a>
+            <a href="{{ routes.cart_url }}">Bag ({{ cart.item_count }})</a>
+          </div>
+          <div class="roselune-drawer-note">Atelier Concierge · Where Little Dreams Bloom</div>
+        </div>
+      {% endif %}
       <div
         class="menu-drawer__utility-links menu-drawer__animated-element"
         style="--menu-drawer-animation-index: {{ linklist.links.size }};"
